@@ -1,6 +1,10 @@
+import os
 import json
 import subprocess
 import semantic_version
+
+libraries = []
+dict_lib_versions = {}
 
 # ------------------------------------------
 # sample input: ([<all webpack versions ("0.1.0" .. "5.0.0-beta.22")>], ~1.12.2)
@@ -52,8 +56,10 @@ def get_dependencies(str_package_json, dependency_type="dependencies"):
     for pair_lib in dict_dependencies:
         pair_ver = dict_dependencies[pair_lib]
         try:
-            print(pair_lib + "=>" +
-                  ", ".join(get_allowed_versions(pair_lib, pair_ver)))
+            libraries.append(pair_lib)
+            dict_lib_versions[pair_lib] = get_allowed_versions(
+                pair_lib, pair_ver)
+
         except Exception as e:
             print("Error occurred for: {library} => {e}".format(
                 library=pair_lib, e=e))
@@ -65,12 +71,26 @@ if __name__ == "__main__":
         "name": "my_package",
         "version": "1.0.0",
         "dependencies": {
-            "webpack": "~1.12.2"
+            "webpack": "~1.12.2",
+            "@babel/cli": "^7.8.4"
         },
         "devDependencies": {
-            "webpack": "~1.0.2"
+            "webpack": "~1.0.2",
+            "@babel/cli": "^7.8.4"
         }
     }
     '''
 
     get_dependencies(package_json)
+
+    f_lib_combo = open("library_combo.txt", "w")
+    for lib in libraries:
+        f_lib_combo.write(lib)
+
+        versions = dict_lib_versions.get(lib)
+        for ver in versions:
+            f_lib_combo.write("\t" + ver)
+
+        f_lib_combo.write("\n")
+
+    f_lib_combo.close()
