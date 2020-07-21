@@ -65,21 +65,16 @@ def get_dependencies(str_package_json, dependency_type="dependencies"):
                 library=pair_lib, e=e))
 
 
+def readPackageJSON(path):
+    content = ""
+    f_json = open(path, "r")
+    content = f_json.read()
+    f_json.close()
+    return content
+
+
 if __name__ == "__main__":
-    package_json = '''
-    {
-        "name": "my_package",
-        "version": "1.0.0",
-        "dependencies": {
-            "webpack": "~1.12.2",
-            "@babel/cli": "^7.8.4"
-        },
-        "devDependencies": {
-            "webpack": "~1.0.2",
-            "@babel/cli": "^7.8.4"
-        }
-    }
-    '''
+    package_json = readPackageJSON("package.json")
 
     get_dependencies(package_json)
 
