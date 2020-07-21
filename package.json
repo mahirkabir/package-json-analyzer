@@ -2,8 +2,8 @@
     "name": "my_package",
     "version": "1.0.0",
     "dependencies": {
-        "webpack": "~1.12.2",
-        "@babel/cli": "^7.8.4"
+        "webpack": "<0.1.2",
+        "@babel/cli": "<7.0.0-beta.6"
     },
     "devDependencies": {
         "webpack": "~1.0.2",

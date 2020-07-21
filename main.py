@@ -2,9 +2,23 @@ import os
 import json
 import subprocess
 import semantic_version
+import itertools
 
 libraries = []
 dict_lib_versions = {}
+
+
+# ------------------------------------------
+# sample input: dict_lib_versions = {'libA': ['vA1', 'vA2', 'vA3'],
+#                         'libB': ['vB1', 'vB2', 'vB3'],
+#                         'libC': ['vC1', 'vC2', 'vC3']}
+# sample output => [('vA1', 'vB1', 'vC1'), ('vA1', 'vB1', 'vC2'), ('vA1', 'vB1', 'vC3'), ('vA1', 'vB2', 'vC1'), ('vA1', 'vB2', 'vC2'), ('vA1', 'vB2', 'vC3'), ('vA1', 'vB3', 'vC1'), ('vA1', 'vB3', 'vC2'), ('vA1', 'vB3', 'vC3'), ('vA2', 'vB1', 'vC1'), ('vA2', 'vB1', 'vC2'), ('vA2', 'vB1', 'vC3'), ('vA2', 'vB2', 'vC1'), ('vA2', 'vB2', 'vC2'), ('vA2', 'vB2', 'vC3'), ('vA2', 'vB3', 'vC1'), ('vA2', 'vB3', 'vC2'), ('vA2', 'vB3', 'vC3'), ('vA3', 'vB1', 'vC1'), ('vA3', 'vB1', 'vC2'), ('vA3', 'vB1', 'vC3'), ('vA3', 'vB2', 'vC1'), ('vA3', 'vB2', 'vC2'), ('vA3', 'vB2', 'vC3'), ('vA3', 'vB3', 'vC1'), ('vA3', 'vB3', 'vC2'), ('vA3', 'vB3', 'vC3')]
+# ------------------------------------------
+
+
+def get_all_lib_combos():
+    lst = list(dict_lib_versions.values())
+    return list(itertools.product(*lst))
 
 # ------------------------------------------
 # sample input: ([<all webpack versions ("0.1.0" .. "5.0.0-beta.22")>], ~1.12.2)
@@ -41,6 +55,9 @@ def get_allowed_versions(library, version):
     all_lib_versions = parse_json(str_stdout)
 
     allowed_versions = get_allowed_versions_from_all(all_lib_versions, version)
+
+    if(len(allowed_versions) == 0):
+        allowed_versions.append(version)
 
     return allowed_versions
 
@@ -95,4 +112,8 @@ if __name__ == "__main__":
 
     get_dependencies(package_json)
 
-    updatePackageJSON("package.json")
+    library_combos = get_all_lib_combos()
+    for combo in library_combos:
+        print(combo)
+
+    # updatePackageJSON("package.json")
