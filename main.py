@@ -73,19 +73,26 @@ def readPackageJSON(path):
     return content
 
 
+# ------------------------------------------
+# Updates package.json using global libraries & dict_lib_versions
+# ------------------------------------------
+def updatePackageJSON(path, dependency_type="dependencies"):
+    f_json = open(path, "r")
+    package_json = json.load(f_json)
+    f_json.close()
+
+    for library in libraries:
+        lib_versions = dict_lib_versions.get(library)
+        package_json[dependency_type][library] = lib_versions[0]
+
+    f_json = open(path, "w")
+    json.dump(package_json, f_json)
+    f_json.close()
+
+
 if __name__ == "__main__":
     package_json = readPackageJSON("package.json")
 
     get_dependencies(package_json)
 
-    f_lib_combo = open("library_combo.txt", "w")
-    for lib in libraries:
-        f_lib_combo.write(lib)
-
-        versions = dict_lib_versions.get(lib)
-        for ver in versions:
-            f_lib_combo.write("\t" + ver)
-
-        f_lib_combo.write("\n")
-
-    f_lib_combo.close()
+    updatePackageJSON("package.json")
