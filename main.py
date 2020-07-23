@@ -3,6 +3,7 @@ import json
 import subprocess
 import semantic_version
 import itertools
+from git_helper import GitHelper
 
 libraries = []
 dict_lib_versions = {}
@@ -116,4 +117,10 @@ if __name__ == "__main__":
     for combo in library_combos:
         print(combo)
 
-    # updatePackageJSON("package.json")
+    github = GitHelper("dependencies")
+    repositories = github.get_ok_to_process_repos()
+
+    for repo_url in repositories:
+        print(repo_url)
+
+    updatePackageJSON("package.json")
