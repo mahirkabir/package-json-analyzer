@@ -123,4 +123,4 @@ if __name__ == "__main__":
     for repo_url in repositories:
         print(repo_url)
 
-    updatePackageJSON("package.json")
+    # updatePackageJSON("package.json")

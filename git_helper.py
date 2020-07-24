@@ -85,6 +85,20 @@ class GitHelper:
             else:
                 no_of_dependencies = 0
 
-            return no_of_dependencies > 0
+            # only processing repos with build scripts
+            has_proper_build_scripts = True
+            if constants.TAG_SCRIPTS in package_json:
+                scripts = package_json[constants.TAG_SCRIPTS]
+                if(len(scripts) == 0):
+                    has_proper_build_scripts = False
+                else:
+                    # ignoring if any build script has "exit 1" in it
+                    # script is a dictionary
+                    for script in scripts:
+                        if "exit 1" in scripts[script]:
+                            has_proper_build_scripts = False
+                            break
+
+            return (no_of_dependencies > 0) & has_proper_build_scripts
         except:
             return False
