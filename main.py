@@ -131,10 +131,10 @@ if __name__ == "__main_org__":
 
 
 def execute_cmd(path, cmd):
-    
+
     working_dir = os.getcwd()
     os.chdir(path)
-    
+
     out = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
                            stderr=subprocess.STDOUT)
 
@@ -149,6 +149,7 @@ def execute_cmd(path, cmd):
     else:
         return [True, str_stdout]
 
+
 if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read("config.ini")
@@ -157,7 +158,7 @@ if __name__ == "__main__":
     project_path = os.path.join(repo_root, "tailwindcss-dark-mode-prototype")
 
     npm_install_result = execute_cmd(project_path, "npm install")
-    
+
     if(npm_install_result[0]):
         # print(npm_install_result[1])
         print("Installed packages successfully")
@@ -166,3 +167,8 @@ if __name__ == "__main__":
         if(build_project_result[0]):
             # print(build_project_result[1])
             print("Built project successfully")
+
+        node_modules_dir = os.path.join(project_path, "node_modules")
+
+        if not (execute_cmd(node_modules_dir, "DEL /F/Q/S *.* > NUL")[0] and execute_cmd(project_path, "RMDIR /Q/S node_modules")[0]):
+            print("Error cleaning installed packages")
