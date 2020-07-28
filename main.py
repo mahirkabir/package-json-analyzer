@@ -141,6 +141,14 @@ def clone_repo_to_dir(directory, git_url):
         raise Exception(clone_result[1])
 
 
+def remove_folder(root, folder):
+    folder_to_delete = os.path.join(
+        root, folder)
+
+    if not (execute_cmd(folder_to_delete, "DEL /F/Q/S *.* > NUL")[0] and execute_cmd(root, "RMDIR /Q/S " + folder_to_delete)[0]):
+        raise Exception("Error removing: " + folder)
+
+
 if __name__ == "__main__":
     github = GitHelper("dependencies")
     repositories = github.get_ok_to_process_repos()
@@ -183,18 +191,15 @@ if __name__ == "__main__":
                     build_project_result = execute_cmd(
                         project_path, "npm run build")
 
-                    # if(build_project_result[0] == False):
-                    log.write("\t".join(combo) + "\n")
+                    if(build_project_result[0] == False):
+                        log.write("\t".join(combo) + "\n")
 
-                    node_modules_dir = os.path.join(
-                        project_path, "node_modules")
+                    remove_folder(project_path, "node_modules")
 
-                    if not (execute_cmd(node_modules_dir, "DEL /F/Q/S *.* > NUL")[0] and execute_cmd(project_path, "RMDIR /Q/S node_modules")[0]):
-                        raise Exception("Error cleaning installed packages")
+            log.close()
 
-                break
-
-            break
+            # removing repo folder after work on it
+            remove_folder(dataset_root, repo["name"])
 
         except Exception as ex:
             print("Error processing repository => " + str(ex))
