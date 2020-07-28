@@ -15,6 +15,8 @@ import os.path
 #                         'libC': ['vC1', 'vC2', 'vC3']}
 # sample output => [('vA1', 'vB1', 'vC1'), ('vA1', 'vB1', 'vC2'), ('vA1', 'vB1', 'vC3'), ('vA1', 'vB2', 'vC1'), ('vA1', 'vB2', 'vC2'), ('vA1', 'vB2', 'vC3'), ('vA1', 'vB3', 'vC1'), ('vA1', 'vB3', 'vC2'), ('vA1', 'vB3', 'vC3'), ('vA2', 'vB1', 'vC1'), ('vA2', 'vB1', 'vC2'), ('vA2', 'vB1', 'vC3'), ('vA2', 'vB2', 'vC1'), ('vA2', 'vB2', 'vC2'), ('vA2', 'vB2', 'vC3'), ('vA2', 'vB3', 'vC1'), ('vA2', 'vB3', 'vC2'), ('vA2', 'vB3', 'vC3'), ('vA3', 'vB1', 'vC1'), ('vA3', 'vB1', 'vC2'), ('vA3', 'vB1', 'vC3'), ('vA3', 'vB2', 'vC1'), ('vA3', 'vB2', 'vC2'), ('vA3', 'vB2', 'vC3'), ('vA3', 'vB3', 'vC1'), ('vA3', 'vB3', 'vC2'), ('vA3', 'vB3', 'vC3')]
 # ------------------------------------------
+
+
 def get_all_lib_combos(dict_lib_versions):
     lst = list(dict_lib_versions.values())
     return list(itertools.product(*lst))
@@ -23,6 +25,8 @@ def get_all_lib_combos(dict_lib_versions):
 # sample input: ([<all webpack versions ("0.1.0" .. "5.0.0-beta.22")>], ~1.12.2)
 # sample output => "1.12.2, .., 1.12.6, .., 1.12.10, .., 1.12.15"
 # ------------------------------------------
+
+
 def get_allowed_versions_from_all(all_versions, version_rule):
 
     allowed_versions = []
@@ -78,7 +82,7 @@ def get_dependencies(str_package_json, dependency_type="dependencies"):
                 pair_lib, pair_ver)
 
         except Exception as e:
-            print("Error occurred for: {library} => {e}".format(
+            raise Exception("Error occurred for: {library} => {e}".format(
                 library=pair_lib, e=e))
 
     return [libraries, dict_lib_versions]
@@ -159,10 +163,12 @@ if __name__ == "__main__":
             libraries = result[0]
             dict_lib_versions = result[1]
 
+            log_file_loc = os.path.join("logs", repo["name"] + ".txt")
+            log = open(log_file_loc, "w")
+
+            log.write("\t".join(libraries) + "\n")
             library_combos = get_all_lib_combos(dict_lib_versions)
             for combo in library_combos:
-                # print(combo)
-
                 if(len(libraries) != len(combo)):
                     raise Exception(
                         "Mismatch in no. of libraries and versions")
@@ -174,20 +180,17 @@ if __name__ == "__main__":
                 npm_install_result = execute_cmd(project_path, "npm install")
 
                 if(npm_install_result[0]):
-                    # print(npm_install_result[1])
-                    print("Installed packages successfully")
-
                     build_project_result = execute_cmd(
                         project_path, "npm run build")
-                    if(build_project_result[0]):
-                        # print(build_project_result[1])
-                        print("Built project successfully")
+
+                    # if(build_project_result[0] == False):
+                    log.write("\t".join(combo) + "\n")
 
                     node_modules_dir = os.path.join(
                         project_path, "node_modules")
 
                     if not (execute_cmd(node_modules_dir, "DEL /F/Q/S *.* > NUL")[0] and execute_cmd(project_path, "RMDIR /Q/S node_modules")[0]):
-                        print("Error cleaning installed packages")
+                        raise Exception("Error cleaning installed packages")
 
                 break
 
