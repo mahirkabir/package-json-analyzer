@@ -9,19 +9,13 @@ import constants
 import os
 import os.path
 
-libraries = []
-dict_lib_versions = {}
-
-
 # ------------------------------------------
 # sample input: dict_lib_versions = {'libA': ['vA1', 'vA2', 'vA3'],
 #                         'libB': ['vB1', 'vB2', 'vB3'],
 #                         'libC': ['vC1', 'vC2', 'vC3']}
 # sample output => [('vA1', 'vB1', 'vC1'), ('vA1', 'vB1', 'vC2'), ('vA1', 'vB1', 'vC3'), ('vA1', 'vB2', 'vC1'), ('vA1', 'vB2', 'vC2'), ('vA1', 'vB2', 'vC3'), ('vA1', 'vB3', 'vC1'), ('vA1', 'vB3', 'vC2'), ('vA1', 'vB3', 'vC3'), ('vA2', 'vB1', 'vC1'), ('vA2', 'vB1', 'vC2'), ('vA2', 'vB1', 'vC3'), ('vA2', 'vB2', 'vC1'), ('vA2', 'vB2', 'vC2'), ('vA2', 'vB2', 'vC3'), ('vA2', 'vB3', 'vC1'), ('vA2', 'vB3', 'vC2'), ('vA2', 'vB3', 'vC3'), ('vA3', 'vB1', 'vC1'), ('vA3', 'vB1', 'vC2'), ('vA3', 'vB1', 'vC3'), ('vA3', 'vB2', 'vC1'), ('vA3', 'vB2', 'vC2'), ('vA3', 'vB2', 'vC3'), ('vA3', 'vB3', 'vC1'), ('vA3', 'vB3', 'vC2'), ('vA3', 'vB3', 'vC3')]
 # ------------------------------------------
-
-
-def get_all_lib_combos():
+def get_all_lib_combos(dict_lib_versions):
     lst = list(dict_lib_versions.values())
     return list(itertools.product(*lst))
 
@@ -29,8 +23,6 @@ def get_all_lib_combos():
 # sample input: ([<all webpack versions ("0.1.0" .. "5.0.0-beta.22")>], ~1.12.2)
 # sample output => "1.12.2, .., 1.12.6, .., 1.12.10, .., 1.12.15"
 # ------------------------------------------
-
-
 def get_allowed_versions_from_all(all_versions, version_rule):
 
     allowed_versions = []
@@ -75,6 +67,9 @@ def get_dependencies(str_package_json, dependency_type="dependencies"):
     parsed_package_json = parse_json(str_package_json)
     dict_dependencies = parsed_package_json[dependency_type]
 
+    libraries = []
+    dict_lib_versions = {}
+
     for pair_lib in dict_dependencies:
         pair_ver = dict_dependencies[pair_lib]
         try:
@@ -85,6 +80,8 @@ def get_dependencies(str_package_json, dependency_type="dependencies"):
         except Exception as e:
             print("Error occurred for: {library} => {e}".format(
                 library=pair_lib, e=e))
+
+    return [libraries, dict_lib_versions]
 
 
 def readPackageJSON(path):
@@ -158,12 +155,11 @@ if __name__ == "__main__":
 
             package_json = readPackageJSON(package_json_loc)
 
-            libraries = []
-            dict_lib_versions = {}
+            result = get_dependencies(package_json)
+            libraries = result[0]
+            dict_lib_versions = result[1]
 
-            get_dependencies(package_json)
-
-            library_combos = get_all_lib_combos()
+            library_combos = get_all_lib_combos(dict_lib_versions)
             for combo in library_combos:
                 # print(combo)
 
