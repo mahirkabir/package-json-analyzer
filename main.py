@@ -96,20 +96,22 @@ def readPackageJSON(path):
 
 
 # ------------------------------------------
-# Updates package.json using global libraries & dict_lib_versions
+# Updates package.json using global libraries & dict_lib_versions' combination
 # ------------------------------------------
-def updatePackageJSON(path, dependency_type="dependencies"):
+def updatePackageJSON(path, libraries, lib_combo, dependency_type="dependencies"):
     f_json = open(path, "r")
     package_json = json.load(f_json)
     f_json.close()
 
+    libIdx = 0
     for library in libraries:
-        lib_versions = dict_lib_versions.get(library)
-        package_json[dependency_type][library] = lib_versions[0]
+        package_json[dependency_type][library] = lib_combo[libIdx]
+        libIdx += 1
 
     f_json = open(path, "w")
     json.dump(package_json, f_json)
     f_json.close()
+
 
 def execute_cmd(path, cmd):
 
@@ -131,34 +133,12 @@ def execute_cmd(path, cmd):
         return [True, str_stdout]
 
 
-if __name__ == "__main_working__":
-    config = configparser.ConfigParser()
-    config.read("config.ini")
-    repo_root = config.get("PATHS", "DATESET_PATH")
-
-    project_path = os.path.join(repo_root, "tailwindcss-dark-mode-prototype")
-
-    npm_install_result = execute_cmd(project_path, "npm install")
-
-    if(npm_install_result[0]):
-        # print(npm_install_result[1])
-        print("Installed packages successfully")
-
-        build_project_result = execute_cmd(project_path, "npm run build")
-        if(build_project_result[0]):
-            # print(build_project_result[1])
-            print("Built project successfully")
-
-        node_modules_dir = os.path.join(project_path, "node_modules")
-
-        if not (execute_cmd(node_modules_dir, "DEL /F/Q/S *.* > NUL")[0] and execute_cmd(project_path, "RMDIR /Q/S node_modules")[0]):
-            print("Error cleaning installed packages")
-
 def clone_repo_to_dir(directory, git_url):
     clone_result = execute_cmd(directory, "git clone " + git_url)
 
     if(clone_result[0] == False):
         raise Exception(clone_result[1])
+
 
 if __name__ == "__main__":
     github = GitHelper("dependencies")
@@ -171,15 +151,51 @@ if __name__ == "__main__":
     for repo in repositories:
         try:
             clone_repo_to_dir(dataset_root, repo["git_url"])
+
+            repo_loc = os.path.join(dataset_root, repo["name"])
+
+            package_json_loc = os.path.join(repo_loc, "package.json")
+
+            package_json = readPackageJSON(package_json_loc)
+
+            libraries = []
+            dict_lib_versions = {}
+
+            get_dependencies(package_json)
+
+            library_combos = get_all_lib_combos()
+            for combo in library_combos:
+                # print(combo)
+
+                if(len(libraries) != len(combo)):
+                    raise Exception(
+                        "Mismatch in no. of libraries and versions")
+
+                updatePackageJSON(package_json_loc, libraries, combo)
+
+                project_path = repo_loc
+
+                npm_install_result = execute_cmd(project_path, "npm install")
+
+                if(npm_install_result[0]):
+                    # print(npm_install_result[1])
+                    print("Installed packages successfully")
+
+                    build_project_result = execute_cmd(
+                        project_path, "npm run build")
+                    if(build_project_result[0]):
+                        # print(build_project_result[1])
+                        print("Built project successfully")
+
+                    node_modules_dir = os.path.join(
+                        project_path, "node_modules")
+
+                    if not (execute_cmd(node_modules_dir, "DEL /F/Q/S *.* > NUL")[0] and execute_cmd(project_path, "RMDIR /Q/S node_modules")[0]):
+                        print("Error cleaning installed packages")
+
+                break
+
+            break
+
         except Exception as ex:
-            print("Error during cloning => " + str(ex))
-
-    # package_json = readPackageJSON("package.json")
-
-    # get_dependencies(package_json)
-
-    # library_combos = get_all_lib_combos()
-    # for combo in library_combos:
-        # print(combo)
-
-    # updatePackageJSON("package.json")
+            print("Error processing repository => " + str(ex))
