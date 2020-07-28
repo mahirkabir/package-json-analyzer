@@ -4,6 +4,10 @@ import subprocess
 import semantic_version
 import itertools
 from git_helper import GitHelper
+import configparser
+import constants
+import os
+import os.path
 
 libraries = []
 dict_lib_versions = {}
@@ -108,7 +112,7 @@ def updatePackageJSON(path, dependency_type="dependencies"):
     f_json.close()
 
 
-if __name__ == "__main__":
+if __name__ == "__main_org__":
     package_json = readPackageJSON("package.json")
 
     get_dependencies(package_json)
@@ -124,3 +128,41 @@ if __name__ == "__main__":
         print(repo_url)
 
     # updatePackageJSON("package.json")
+
+
+def execute_cmd(path, cmd):
+    
+    working_dir = os.getcwd()
+    os.chdir(path)
+    
+    out = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
+                           stderr=subprocess.STDOUT)
+
+    stdout, stderr = out.communicate()
+    # utf-8 encoding is reverse compatible with ASCII
+    str_stdout = stdout.decode("utf-8")
+
+    os.chdir(working_dir)
+
+    if "ERR" in str_stdout or "err" in str_stdout:
+        return [False, str_stdout]
+    else:
+        return [True, str_stdout]
+
+if __name__ == "__main__":
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    repo_root = config.get("PATHS", "REPO_PATH")
+
+    project_path = os.path.join(repo_root, "tailwindcss-dark-mode-prototype")
+
+    npm_install_result = execute_cmd(project_path, "npm install")
+    
+    if(npm_install_result[0]):
+        # print(npm_install_result[1])
+        print("Installed packages successfully")
+
+        build_project_result = execute_cmd(project_path, "npm run build")
+        if(build_project_result[0]):
+            # print(build_project_result[1])
+            print("Built project successfully")
