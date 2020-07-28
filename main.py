@@ -111,25 +111,6 @@ def updatePackageJSON(path, dependency_type="dependencies"):
     json.dump(package_json, f_json)
     f_json.close()
 
-
-if __name__ == "__main_org__":
-    package_json = readPackageJSON("package.json")
-
-    get_dependencies(package_json)
-
-    library_combos = get_all_lib_combos()
-    for combo in library_combos:
-        print(combo)
-
-    github = GitHelper("dependencies")
-    repositories = github.get_ok_to_process_repos()
-
-    for repo_url in repositories:
-        print(repo_url)
-
-    # updatePackageJSON("package.json")
-
-
 def execute_cmd(path, cmd):
 
     working_dir = os.getcwd()
@@ -150,10 +131,10 @@ def execute_cmd(path, cmd):
         return [True, str_stdout]
 
 
-if __name__ == "__main__":
+if __name__ == "__main_working__":
     config = configparser.ConfigParser()
     config.read("config.ini")
-    repo_root = config.get("PATHS", "REPO_PATH")
+    repo_root = config.get("PATHS", "DATESET_PATH")
 
     project_path = os.path.join(repo_root, "tailwindcss-dark-mode-prototype")
 
@@ -172,3 +153,33 @@ if __name__ == "__main__":
 
         if not (execute_cmd(node_modules_dir, "DEL /F/Q/S *.* > NUL")[0] and execute_cmd(project_path, "RMDIR /Q/S node_modules")[0]):
             print("Error cleaning installed packages")
+
+def clone_repo_to_dir(directory, git_url):
+    clone_result = execute_cmd(directory, "git clone " + git_url)
+
+    if(clone_result[0] == False):
+        raise Exception(clone_result[1])
+
+if __name__ == "__main__":
+    github = GitHelper("dependencies")
+    repositories = github.get_ok_to_process_repos()
+
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    dataset_root = config.get("PATHS", "DATESET_PATH")
+
+    for repo in repositories:
+        try:
+            clone_repo_to_dir(dataset_root, repo["git_url"])
+        except Exception as ex:
+            print("Error during cloning => " + str(ex))
+
+    # package_json = readPackageJSON("package.json")
+
+    # get_dependencies(package_json)
+
+    # library_combos = get_all_lib_combos()
+    # for combo in library_combos:
+        # print(combo)
+
+    # updatePackageJSON("package.json")

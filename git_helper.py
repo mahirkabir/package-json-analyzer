@@ -58,7 +58,7 @@ class GitHelper:
                 repo_url = 'https://github.com/%s/%s' % (user, repo_name)
 
                 if(self.ok_to_process(repo_url)):
-                    self.ok_to_process_repos.append(repo_url)
+                    self.ok_to_process_repos.append(repo)
                     self.no_of_collected_repos += 1
 
                     if(self.no_of_collected_repos >= constants.LIMIT_OF_COLLECTED_REPOS):
