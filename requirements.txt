@@ -1,3 +1,5 @@
 semantic_version
 requests
 beautifulsoup4
+pyfpgrowth
+mysql-connector-python

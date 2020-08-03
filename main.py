@@ -8,6 +8,7 @@ import configparser
 import constants
 import os
 import os.path
+from db_helper import DBInstance
 
 # ------------------------------------------
 # sample input: dict_lib_versions = {'libA': ['vA1', 'vA2', 'vA3'],
@@ -88,7 +89,7 @@ def get_dependencies(str_package_json, dependency_type="dependencies"):
     return [libraries, dict_lib_versions]
 
 
-def readPackageJSON(path):
+def read_package_json(path):
     content = ""
     f_json = open(path, "r")
     content = f_json.read()
@@ -99,7 +100,7 @@ def readPackageJSON(path):
 # ------------------------------------------
 # Updates package.json using global libraries & dict_lib_versions' combination
 # ------------------------------------------
-def updatePackageJSON(path, libraries, lib_combo, dependency_type="dependencies"):
+def update_package_json(path, libraries, lib_combo, dependency_type="dependencies"):
     f_json = open(path, "r")
     package_json = json.load(f_json)
     f_json.close()
@@ -149,6 +150,23 @@ def remove_folder(root, folder):
         raise Exception("Error removing: " + folder)
 
 
+def add_combo_repo(db_instance, libraries, combo, url):
+    try:
+        combo_main_pattern = []
+
+        libIdx = 0
+        for library in libraries:
+            combo_main_pattern.append(library + "=>" + combo[libIdx])
+            libIdx += 1
+
+        combo_str = ", ".join(combo_main_pattern)
+        
+        db_instance.add_combo_repo(combo_str, url)
+
+    except Exception as ex:
+        print("Error inserting combo-repo_url information: " + str(ex))
+
+
 if __name__ == "__main__":
     github = GitHelper("dependencies")
     repositories = github.get_ok_to_process_repos()
@@ -156,6 +174,13 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read("config.ini")
     dataset_root = config.get("PATHS", "DATESET_PATH")
+
+    db_config = config["DB CONNECT"]
+    password = db_config["PASSWORD"]
+    if password == "<BLANK>":
+        password = ""
+    db_instance = DBInstance(
+        db_config["HOST"], db_config["USER"], password, db_config["DATABASE"])
 
     for repo in repositories:
         try:
@@ -165,7 +190,7 @@ if __name__ == "__main__":
 
             package_json_loc = os.path.join(repo_loc, "package.json")
 
-            package_json = readPackageJSON(package_json_loc)
+            package_json = read_package_json(package_json_loc)
 
             result = get_dependencies(package_json)
             libraries = result[0]
@@ -177,15 +202,19 @@ if __name__ == "__main__":
             log.write("\t".join(libraries) + "\n")
             library_combos = get_all_lib_combos(dict_lib_versions)
             for combo in library_combos:
+
                 if(len(libraries) != len(combo)):
                     raise Exception(
                         "Mismatch in no. of libraries and versions")
 
-                updatePackageJSON(package_json_loc, libraries, combo)
+                add_combo_repo(db_instance, libraries, combo, repo["url"])
+
+                update_package_json(package_json_loc, libraries, combo)
 
                 project_path = repo_loc
 
-                npm_install_result = execute_cmd(project_path, "npm install")
+                npm_install_result = execute_cmd(
+                    project_path, "npm install")
 
                 if(npm_install_result[0]):
                     build_project_result = execute_cmd(
