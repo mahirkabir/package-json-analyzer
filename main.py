@@ -160,16 +160,34 @@ def add_combo_repo(db_instance, libraries, combo, url):
             libIdx += 1
 
         combo_str = ", ".join(combo_main_pattern)
-        
+
         db_instance.add_combo_repo(combo_str, url)
 
     except Exception as ex:
         print("Error inserting combo-repo_url information: " + str(ex))
 
 
+def get_npm_rank_repos():
+    reader = open("npm_rank.txt", "r")
+
+    repo_lines = reader.readlines()
+    npm_rank_repos = []
+
+    for repo_line in repo_lines:
+        repo_info = repo_line.split("\t")
+        repo = {"name": repo_info[0], "url": repo_info[1]}
+        npm_rank_repos.append(repo)
+
+    reader.close()
+
+    return npm_rank_repos
+
+
 if __name__ == "__main__":
-    github = GitHelper("dependencies")
-    repositories = github.get_ok_to_process_repos()
+    # github = GitHelper("dependencies")
+    # repositories = github.get_ok_to_process_repos()
+
+    repositories = get_npm_rank_repos()
 
     config = configparser.ConfigParser()
     config.read("config.ini")
@@ -179,12 +197,16 @@ if __name__ == "__main__":
     password = db_config["PASSWORD"]
     if password == "<BLANK>":
         password = ""
-    db_instance = DBInstance(
-        db_config["HOST"], db_config["USER"], password, db_config["DATABASE"])
+
+    try:
+        db_instance = DBInstance(
+            db_config["HOST"], db_config["USER"], password, db_config["DATABASE"])
+    except Exception as ex:
+        db_instance = ""
 
     for repo in repositories:
         try:
-            clone_repo_to_dir(dataset_root, repo["git_url"])
+            clone_repo_to_dir(dataset_root, repo["url"])
 
             repo_loc = os.path.join(dataset_root, repo["name"])
 
@@ -192,43 +214,62 @@ if __name__ == "__main__":
 
             package_json = read_package_json(package_json_loc)
 
-            result = get_dependencies(package_json)
-            libraries = result[0]
-            dict_lib_versions = result[1]
+            for dependency_type in ["dependencies", "devDependencies"]:
+                try:
+                    result = get_dependencies(package_json, dependency_type)
+                    libraries = result[0]
+                    dict_lib_versions = result[1]
 
-            log_file_loc = os.path.join("logs", repo["name"] + ".txt")
-            log = open(log_file_loc, "w")
+                    log_file_loc = os.path.join(
+                        "logs", repo["name"] + "_" + dependency_type + ".txt")
+                    log = open(log_file_loc, "w")
 
-            log.write("\t".join(libraries) + "\n")
-            library_combos = get_all_lib_combos(dict_lib_versions)
-            for combo in library_combos:
+                    libraries_str = "\t".join(libraries)
+                    log.write("Type" + "\t" + libraries_str + "\n")
 
-                if(len(libraries) != len(combo)):
-                    raise Exception(
-                        "Mismatch in no. of libraries and versions")
+                    # mult = 1
+                    # for lib in libraries:
+                        # mult *= len(dict_lib_versions[lib])
+                    # print(mult)
 
-                add_combo_repo(db_instance, libraries, combo, repo["url"])
+                    library_combos = get_all_lib_combos(dict_lib_versions)
+                    for combo in library_combos:
 
-                update_package_json(package_json_loc, libraries, combo)
+                        if(len(libraries) != len(combo)):
+                            raise Exception(
+                                "Mismatch in no. of libraries and versions")
 
-                project_path = repo_loc
+                        if db_instance != "":
+                            add_combo_repo(
+                                db_instance, libraries, combo, repo["url"])
 
-                npm_install_result = execute_cmd(
-                    project_path, "npm install")
+                        update_package_json(
+                            package_json_loc, libraries, combo, dependency_type)
 
-                if(npm_install_result[0]):
-                    build_project_result = execute_cmd(
-                        project_path, "npm run build")
+                        project_path = repo_loc
 
-                    if(build_project_result[0] == False):
-                        log.write("\t".join(combo) + "\n")
+                        npm_install_result = execute_cmd(
+                            project_path, "npm install")
 
-                    remove_folder(project_path, "node_modules")
+                        if(npm_install_result[0]):
+                            build_project_result = execute_cmd(
+                                project_path, "npm run build")
 
-            log.close()
+                            if(build_project_result[0] == False):
+                                combo_str = "\t".join(combo)
+                                log.write(dependency_type +
+                                          "\t" + combo_str + "\n")
 
-            # removing repo folder after work on it
+                            remove_folder(project_path, "node_modules")
+
+                    log.close()
+
+                except Exception as ex:
+                    pass
+
+            # removing repo folder after working on it
             remove_folder(dataset_root, repo["name"])
+            break
 
         except Exception as ex:
             print("Error processing repository => " + str(ex))
