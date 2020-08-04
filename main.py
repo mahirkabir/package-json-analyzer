@@ -146,8 +146,9 @@ def remove_folder(root, folder):
     folder_to_delete = os.path.join(
         root, folder)
 
-    if not (execute_cmd(folder_to_delete, "DEL /F/Q/S *.* > NUL")[0] and execute_cmd(root, "RMDIR /Q/S " + folder_to_delete)[0]):
-        raise Exception("Error removing: " + folder)
+    if(os.path.isdir(folder_to_delete)):
+        if not (execute_cmd(folder_to_delete, "DEL /F/Q/S *.* > NUL")[0] and execute_cmd(root, "RMDIR /Q/S " + folder_to_delete)[0]):
+            raise Exception("Error removing: " + folder)
 
 
 def add_combo_repo(db_instance, libraries, combo, url):
@@ -184,6 +185,7 @@ def get_npm_rank_repos():
 
 
 if __name__ == "__main__":
+
     # github = GitHelper("dependencies")
     # repositories = github.get_ok_to_process_repos()
 
@@ -216,7 +218,8 @@ if __name__ == "__main__":
 
             for dependency_type in ["dependencies", "devDependencies"]:
                 try:
-                    result = get_dependencies(package_json, dependency_type)
+                    result = get_dependencies(
+                        package_json, dependency_type)
                     libraries = result[0]
                     dict_lib_versions = result[1]
 
@@ -229,7 +232,7 @@ if __name__ == "__main__":
 
                     # mult = 1
                     # for lib in libraries:
-                        # mult *= len(dict_lib_versions[lib])
+                    # mult *= len(dict_lib_versions[lib])
                     # print(mult)
 
                     library_combos = get_all_lib_combos(dict_lib_versions)
@@ -258,9 +261,10 @@ if __name__ == "__main__":
                             if(build_project_result[0] == False):
                                 combo_str = "\t".join(combo)
                                 log.write(dependency_type +
-                                          "\t" + combo_str + "\n")
+                                            "\t" + combo_str + "\n")
 
-                            remove_folder(project_path, "node_modules")
+                        # removing, even if partially installed
+                        remove_folder(project_path, "node_modules")
 
                     log.close()
 
