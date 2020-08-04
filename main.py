@@ -135,11 +135,20 @@ def execute_cmd(path, cmd):
         return [True, str_stdout]
 
 
-def clone_repo_to_dir(directory, git_url):
-    clone_result = execute_cmd(directory, "git clone " + git_url)
+def clone_repo_to_dir(directory, git_url, repo_name):
+    repo_safe_name = repo_name
+    suffix = 0
+    while os.path.exists(os.path.join(directory, repo_safe_name)):
+        suffix += 1
+        repo_safe_name = repo_name + "_" + str(suffix)
+
+    cmd = "git clone {git_url} {repo_name}".format(git_url=git_url, repo_name=repo_safe_name)
+    clone_result = execute_cmd(directory, cmd)
 
     if(clone_result[0] == False):
         raise Exception(clone_result[1])
+    else:
+        return repo_safe_name
 
 
 def remove_folder(root, folder):
@@ -176,7 +185,7 @@ def get_npm_rank_repos():
 
     for repo_line in repo_lines:
         repo_info = repo_line.split("\t")
-        repo = {"name": repo_info[0], "url": repo_info[1]}
+        repo = {"name": repo_info[0].strip(), "url": repo_info[1].strip()}
         npm_rank_repos.append(repo)
 
     reader.close()
@@ -208,9 +217,9 @@ if __name__ == "__main__":
 
     for repo in repositories:
         try:
-            clone_repo_to_dir(dataset_root, repo["url"])
+            repo_name = clone_repo_to_dir(dataset_root, repo["url"], repo["name"])
 
-            repo_loc = os.path.join(dataset_root, repo["name"])
+            repo_loc = os.path.join(dataset_root, repo_name)
 
             package_json_loc = os.path.join(repo_loc, "package.json")
 
@@ -224,7 +233,7 @@ if __name__ == "__main__":
                     dict_lib_versions = result[1]
 
                     log_file_loc = os.path.join(
-                        "logs", repo["name"] + "_" + dependency_type + ".txt")
+                        "logs", repo_name + "_" + dependency_type + ".txt")
                     log = open(log_file_loc, "w")
 
                     libraries_str = "\t".join(libraries)
@@ -272,8 +281,8 @@ if __name__ == "__main__":
                     pass
 
             # removing repo folder after working on it
-            remove_folder(dataset_root, repo["name"])
+            remove_folder(dataset_root, repo_name)
             break
-
+            
         except Exception as ex:
             print("Error processing repository => " + str(ex))
