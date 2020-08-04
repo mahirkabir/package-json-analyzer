@@ -8,11 +8,11 @@ import json
 
 class GitHelper:
 
-    def __init__(self, dependency_type):
-        self.api_url = api_url = "https://api.github.com/search/repositories?q=%20language:javascript+created:{start_date}..{end_date}&sort=stars&order=desc&type=repository&page={page_no}&order={order}"
+    def __init__(self, dependency_types, api_url = "https://api.github.com/search/repositories?q=%20language:javascript+created:{start_date}..{end_date}&sort=stars&order=desc&type=repository&page={page_no}&order={order}"):
+        self.api_url = api_url
         self.ok_to_process_repos = []
         self.date_format = "%Y-%m-%" + "d"
-        self.dependency_type = dependency_type
+        self.dependency_types = dependency_types
         self.no_of_collected_repos = 0
 
     def get_ok_to_process_repos(self):
@@ -77,13 +77,13 @@ class GitHelper:
 
             soup = BeautifulSoup(page.content, 'html.parser')
             package_json = json.loads(soup.text)
+            no_of_dependencies = 0
 
             # we are not counting repos with no dependencies
             # package_json acts like a dictionary
-            if self.dependency_type in package_json:
-                no_of_dependencies = len(package_json[self.dependency_type])
-            else:
-                no_of_dependencies = 0
+            for dependency_type in self.dependency_types:
+                if dependency_type in package_json:
+                    no_of_dependencies += len(package_json[dependency_type])
 
             # only processing repos with build scripts
             has_proper_build_scripts = True
@@ -100,5 +100,5 @@ class GitHelper:
                             break
 
             return (no_of_dependencies > 0) & has_proper_build_scripts
-        except:
+        except Exception as ex:
             return False
