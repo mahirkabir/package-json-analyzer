@@ -142,7 +142,8 @@ def clone_repo_to_dir(directory, git_url, repo_name):
         suffix += 1
         repo_safe_name = repo_name + "_" + str(suffix)
 
-    cmd = "git clone {git_url} {repo_name}".format(git_url=git_url, repo_name=repo_safe_name)
+    cmd = "git clone {git_url} {repo_name}".format(
+        git_url=git_url, repo_name=repo_safe_name)
     clone_result = execute_cmd(directory, cmd)
 
     if(clone_result[0] == False):
@@ -192,6 +193,20 @@ def get_npm_rank_repos():
 
     return npm_rank_repos
 
+def get_dict_repo_count():
+    reader = open("sorted_libraries.txt", "r")
+
+    repo_lines = reader.readlines()
+    dict_repo_count = {}
+
+    for repo_line in repo_lines:
+        repo_info = repo_line.split("\t")
+        count = repo_info[1].strip()
+        dict_repo_count[repo_info[0].strip()] = count
+
+    reader.close()
+
+    return dict_repo_count
 
 if __name__ == "__main__":
 
@@ -199,6 +214,21 @@ if __name__ == "__main__":
     # repositories = github.get_ok_to_process_repos()
 
     repositories = get_npm_rank_repos()
+    dict_repo_count = get_dict_repo_count()  # has count of # of possible combos
+    # TODO: Need to update it, because it is read from file and is not updated automatically
+
+    # keeping only repos having <= 1000 possible combos
+    # TODO: Current dataset has no duplicate names, but need to handle it in future to make tool scalable
+    repositories = list(filter(lambda repo: repo["name"] in dict_repo_count
+                               and int(dict_repo_count[repo["name"]]) <= constants.LIMIT_OF_COLLECTED_REPOS,
+                               repositories))
+
+    repositories = list(map(lambda repo: {"name": repo["name"],
+                                          "url": repo["url"], "count": int(dict_repo_count[repo["name"]])},
+                                          repositories))
+
+    # sort them based on their valid combo count
+    repositories.sort(key=lambda repo: repo["count"])
 
     config = configparser.ConfigParser()
     config.read("config.ini")
@@ -217,7 +247,8 @@ if __name__ == "__main__":
 
     for repo in repositories:
         try:
-            repo_name = clone_repo_to_dir(dataset_root, repo["url"], repo["name"])
+            repo_name = clone_repo_to_dir(
+                dataset_root, repo["url"], repo["name"])
 
             repo_loc = os.path.join(dataset_root, repo_name)
 
@@ -283,6 +314,6 @@ if __name__ == "__main__":
             # removing repo folder after working on it
             remove_folder(dataset_root, repo_name)
             break
-            
+
         except Exception as ex:
             print("Error processing repository => " + str(ex))
