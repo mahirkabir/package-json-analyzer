@@ -8,7 +8,7 @@ import json
 
 class GitHelper:
 
-    def __init__(self, dependency_types, api_url = "https://api.github.com/search/repositories?q=%20language:javascript+created:{start_date}..{end_date}&sort=stars&order=desc&type=repository&page={page_no}&order={order}"):
+    def __init__(self, dependency_types="dependencies", api_url="https://api.github.com/search/repositories?q=%20language:javascript+created:{start_date}..{end_date}&sort=stars&order=desc&type=repository&page={page_no}&order={order}"):
         self.api_url = api_url
         self.ok_to_process_repos = []
         self.date_format = "%Y-%m-%" + "d"
@@ -16,10 +16,10 @@ class GitHelper:
         self.no_of_collected_repos = 0
 
     def get_ok_to_process_repos(self):
-        self.crawlProject()
+        self.crawl_project()
         return self.ok_to_process_repos
 
-    def crawlProject(self):
+    def crawl_project(self):
         end_date = datetime.today()
 
         while(True):
@@ -28,7 +28,7 @@ class GitHelper:
             start_date_str = start_date.strftime(self.date_format)
             end_date_str = end_date.strftime(self.date_format)
 
-            self.crawlProjectsInRange(start_date_str, end_date_str)
+            self.crawl_projects_in_range(start_date_str, end_date_str)
 
             if(self.no_of_collected_repos >= constants.LIMIT_OF_COLLECTED_REPOS):
                 break
@@ -38,7 +38,7 @@ class GitHelper:
 
             end_date = start_date + timedelta(days=-1)
 
-    def crawlProjectsInRange(self, start_date_str, end_date_str):
+    def crawl_projects_in_range(self, start_date_str, end_date_str):
 
         for page in range(1, 34):
 
@@ -102,3 +102,13 @@ class GitHelper:
             return (no_of_dependencies > 0) & has_proper_build_scripts
         except Exception as ex:
             return False
+
+    def has_package_lock(self, repo_url):
+        repo_link = repo_url.replace("github.com", "raw.githubusercontent.com")
+        config_file = repo_link + "/master/package-lock.json"
+
+        page = requests.get(config_file)
+
+        if(page.status_code == constants.ERROR_CODE_NOT_FOUND):
+            return False
+        return True

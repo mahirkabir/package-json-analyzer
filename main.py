@@ -193,6 +193,7 @@ def get_npm_rank_repos():
 
     return npm_rank_repos
 
+
 def get_dict_repo_count():
     reader = open("sorted_libraries.txt", "r")
 
@@ -208,6 +209,17 @@ def get_dict_repo_count():
 
     return dict_repo_count
 
+# finds out if package-lock.json is there
+# finds out if dependencies and devDependencies have overlapping packages
+
+
+def collect_info(repo):
+    repo = {"name": repo["name"], "url": repo["url"], "count": repo["count"],
+            "has_package_lock": GitHelper().has_package_lock(repo["url"]), "overlapping_libs": []}
+
+    return repo
+
+
 if __name__ == "__main__":
 
     # github = GitHelper("dependencies")
@@ -220,15 +232,17 @@ if __name__ == "__main__":
     # keeping only repos having <= 1000 possible combos
     # TODO: Current dataset has no duplicate names, but need to handle it in future to make tool scalable
     repositories = list(filter(lambda repo: repo["name"] in dict_repo_count
-                               and int(dict_repo_count[repo["name"]]) <= constants.LIMIT_OF_COLLECTED_REPOS,
+                               and int(dict_repo_count[repo["name"]]) <= constants.LIMIT_OF_NO_OF_VALID_COMBO,
                                repositories))
 
     repositories = list(map(lambda repo: {"name": repo["name"],
                                           "url": repo["url"], "count": int(dict_repo_count[repo["name"]])},
-                                          repositories))
+                            repositories))
 
     # sort them based on their valid combo count
     repositories.sort(key=lambda repo: repo["count"])
+
+    repositories = list(map(lambda repo: collect_info(repo), repositories))
 
     config = configparser.ConfigParser()
     config.read("config.ini")
@@ -245,75 +259,97 @@ if __name__ == "__main__":
     except Exception as ex:
         db_instance = ""
 
+    run_stats = {"total": 0, "package-lock": 0, "overlapping": 0}
+
     for repo in repositories:
         try:
-            repo_name = clone_repo_to_dir(
-                dataset_root, repo["url"], repo["name"])
+            run_stats["total"] += 1
 
-            repo_loc = os.path.join(dataset_root, repo_name)
+            if(repo["has_package_lock"]):
+                print(repo["name"] + " has package-lock.json")
+                run_stats["package-lock"] += 1
+            
+            if len(repo["overlapping_libs"]) > 0:
+                print(repo["name"] + " has overlapping libraries")
+                run_stats["overlapping"] += 1
+            
+            if False and repo["has_package_lock"] == False and len(repo["overlapping_libs"]) == 0:
+                repo_name = clone_repo_to_dir(
+                    dataset_root, repo["url"], repo["name"])
 
-            package_json_loc = os.path.join(repo_loc, "package.json")
+                repo_loc = os.path.join(dataset_root, repo_name)
 
-            package_json = read_package_json(package_json_loc)
+                package_json_loc = os.path.join(repo_loc, "package.json")
 
-            for dependency_type in ["dependencies", "devDependencies"]:
-                try:
-                    result = get_dependencies(
-                        package_json, dependency_type)
-                    libraries = result[0]
-                    dict_lib_versions = result[1]
+                package_json = read_package_json(package_json_loc)
 
-                    log_file_loc = os.path.join(
-                        "logs", repo_name + "_" + dependency_type + ".txt")
-                    log = open(log_file_loc, "w")
+                for dependency_type in ["dependencies", "devDependencies"]:
+                    try:
+                        result = get_dependencies(
+                            package_json, dependency_type)
+                        libraries = result[0]
+                        dict_lib_versions = result[1]
 
-                    libraries_str = "\t".join(libraries)
-                    log.write("Type" + "\t" + libraries_str + "\n")
+                        log_file_loc = os.path.join(
+                            "logs", repo_name + "_" + dependency_type + ".txt")
+                        log = open(log_file_loc, "w")
 
-                    # mult = 1
-                    # for lib in libraries:
-                    # mult *= len(dict_lib_versions[lib])
-                    # print(mult)
+                        libraries_str = "\t".join(libraries)
+                        log.write("Type" + "\t" + libraries_str + "\n")
 
-                    library_combos = get_all_lib_combos(dict_lib_versions)
-                    for combo in library_combos:
+                        # mult = 1
+                        # for lib in libraries:
+                        # mult *= len(dict_lib_versions[lib])
+                        # print(mult)
 
-                        if(len(libraries) != len(combo)):
-                            raise Exception(
-                                "Mismatch in no. of libraries and versions")
+                        library_combos = get_all_lib_combos(dict_lib_versions)
+                        for combo in library_combos:
 
-                        if db_instance != "":
-                            add_combo_repo(
-                                db_instance, libraries, combo, repo["url"])
+                            if(len(libraries) != len(combo)):
+                                raise Exception(
+                                    "Mismatch in no. of libraries and versions")
 
-                        update_package_json(
-                            package_json_loc, libraries, combo, dependency_type)
+                            if db_instance != "":
+                                add_combo_repo(
+                                    db_instance, libraries, combo, repo["url"])
 
-                        project_path = repo_loc
+                            update_package_json(
+                                package_json_loc, libraries, combo, dependency_type)
 
-                        npm_install_result = execute_cmd(
-                            project_path, "npm install")
+                            project_path = repo_loc
 
-                        if(npm_install_result[0]):
-                            build_project_result = execute_cmd(
-                                project_path, "npm run build")
+                            npm_install_result = execute_cmd(
+                                project_path, "npm install")
 
-                            if(build_project_result[0] == False):
-                                combo_str = "\t".join(combo)
-                                log.write(dependency_type +
-                                            "\t" + combo_str + "\n")
+                            if(npm_install_result[0]):
+                                build_project_result = execute_cmd(
+                                    project_path, "npm run build")
 
-                        # removing, even if partially installed
-                        remove_folder(project_path, "node_modules")
+                                if(build_project_result[0] == False):
+                                    combo_str = "\t".join(combo)
+                                    log.write(dependency_type +
+                                              "\t" + combo_str + "\n")
 
-                    log.close()
+                            # removing, even if partially installed
+                            remove_folder(project_path, "node_modules")
 
-                except Exception as ex:
-                    pass
+                        log.close()
 
-            # removing repo folder after working on it
-            remove_folder(dataset_root, repo_name)
-            break
+                    except Exception as ex:
+                        pass
+
+                # removing repo folder after working on it
+                remove_folder(dataset_root, repo_name)
+                break
 
         except Exception as ex:
             print("Error processing repository => " + str(ex))
+
+    print("-------------------------------")
+    print("Process completed")
+    print("# of Total processed repositories: " + str(run_stats["total"]))
+    print("# of repositories having package-lock.json: " +
+          str(run_stats["package-lock"]))
+    print("# of repositories having overlapping libraries in dependencies and devDependencies: " +
+          str(run_stats["overlapping"]))
+    print("-------------------------------")
