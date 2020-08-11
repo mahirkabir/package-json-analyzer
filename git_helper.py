@@ -112,3 +112,13 @@ class GitHelper:
         if(page.status_code == constants.ERROR_CODE_NOT_FOUND):
             return False
         return True
+
+    def get_str_package_json(self, repo_url):
+        repo_link = repo_url.replace("github.com", "raw.githubusercontent.com")
+        config_file = repo_link + "/master/package.json"
+
+        page = requests.get(config_file)
+
+        if(page.status_code == constants.ERROR_CODE_NOT_FOUND):
+            return ""
+        return page.content

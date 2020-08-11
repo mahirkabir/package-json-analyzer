@@ -68,23 +68,43 @@ def parse_json(str_json):
     return json.loads(str_json)
 
 
-def get_dependencies(str_package_json, dependency_type="dependencies"):
-    parsed_package_json = parse_json(str_package_json)
-    dict_dependencies = parsed_package_json[dependency_type]
+def get_dependency_names(str_package_json, dependency_type="dependencies"):
+    libraries = []
 
+    parsed_package_json = parse_json(str_package_json)
+
+    if(dependency_type in parsed_package_json):
+        dict_dependencies = parsed_package_json[dependency_type]
+
+        for pair_lib in dict_dependencies:
+            try:
+                libraries.append(pair_lib)
+
+            except Exception as e:
+                raise Exception("Error occurred for: {library} => {e}".format(
+                    library=pair_lib, e=e))
+
+    return libraries
+
+def get_dependencies(str_package_json, dependency_type="dependencies"):
     libraries = []
     dict_lib_versions = {}
 
-    for pair_lib in dict_dependencies:
-        pair_ver = dict_dependencies[pair_lib]
-        try:
-            libraries.append(pair_lib)
-            dict_lib_versions[pair_lib] = get_allowed_versions(
-                pair_lib, pair_ver)
+    parsed_package_json = parse_json(str_package_json)
 
-        except Exception as e:
-            raise Exception("Error occurred for: {library} => {e}".format(
-                library=pair_lib, e=e))
+    if(dependency_type in parsed_package_json):
+        dict_dependencies = parsed_package_json[dependency_type]
+
+        for pair_lib in dict_dependencies:
+            pair_ver = dict_dependencies[pair_lib]
+            try:
+                libraries.append(pair_lib)
+                dict_lib_versions[pair_lib] = get_allowed_versions(
+                    pair_lib, pair_ver)
+
+            except Exception as e:
+                raise Exception("Error occurred for: {library} => {e}".format(
+                    library=pair_lib, e=e))
 
     return [libraries, dict_lib_versions]
 
@@ -210,12 +230,21 @@ def get_dict_repo_count():
     return dict_repo_count
 
 # finds out if package-lock.json is there
-# finds out if dependencies and devDependencies have overlapping packages
+# finds out if dependencies and devDependencies have overlapping libraries
 
 
 def collect_info(repo):
+    helper = GitHelper()
     repo = {"name": repo["name"], "url": repo["url"], "count": repo["count"],
-            "has_package_lock": GitHelper().has_package_lock(repo["url"]), "overlapping_libs": []}
+            "has_package_lock": helper.has_package_lock(repo["url"]), "overlapping_libs": []}
+
+    str_package_json = helper.get_str_package_json(repo["url"])
+    # collecting overlapping libraries
+    dependencies = get_dependency_names(str_package_json, "dependencies")
+    dev_dependencies = get_dependency_names(
+        str_package_json, "devDependencies")
+
+    repo["overlapping_libs"] = list(set(dependencies) & set(dev_dependencies))
 
     return repo
 
@@ -268,11 +297,11 @@ if __name__ == "__main__":
             if(repo["has_package_lock"]):
                 print(repo["name"] + " has package-lock.json")
                 run_stats["package-lock"] += 1
-            
+
             if len(repo["overlapping_libs"]) > 0:
-                print(repo["name"] + " has overlapping libraries")
+                print(repo["name"] + " has overlapping libraries: " + ",".join(repo["overlapping_libs"]))
                 run_stats["overlapping"] += 1
-            
+
             if False and repo["has_package_lock"] == False and len(repo["overlapping_libs"]) == 0:
                 repo_name = clone_repo_to_dir(
                     dataset_root, repo["url"], repo["name"])
