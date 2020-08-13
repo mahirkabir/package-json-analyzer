@@ -119,14 +119,16 @@ def read_package_json(path):
 
 # ------------------------------------------
 # Updates package.json using global libraries & dict_lib_versions' combination
+# dict_lib_type is to find out which library belongs to which dependency type
 # ------------------------------------------
-def update_package_json(path, libraries, lib_combo, dependency_type="dependencies"):
+def update_package_json(path, libraries, dict_lib_type, lib_combo):
     f_json = open(path, "r")
     package_json = json.load(f_json)
     f_json.close()
 
     libIdx = 0
     for library in libraries:
+        dependency_type = dict_lib_type[library]
         package_json[dependency_type][library] = lib_combo[libIdx]
         libIdx += 1
 
@@ -248,6 +250,15 @@ def collect_info(repo):
 
     return repo
 
+# tracks which library comes from which dependency type
+# sample input: ["lodash", "webpack"], "devDependency"
+# sample output: {"lodash": "devDependency", "webpack": "devDependency"}
+
+
+def list_to_dict(libs, dep_type):
+    sz = len(libs)
+    dict = {libs[i]: dep_type for i in range(0, sz)}
+    return dict
 
 if __name__ == "__main__":
 
@@ -292,6 +303,8 @@ if __name__ == "__main__":
 
     for repo in repositories:
         try:
+            print("Processing: " + repo["url"])
+
             run_stats["total"] += 1
 
             if(repo["has_package_lock"]):
@@ -299,77 +312,93 @@ if __name__ == "__main__":
                 run_stats["package-lock"] += 1
 
             if len(repo["overlapping_libs"]) > 0:
-                print(repo["name"] + " has overlapping libraries: " + ",".join(repo["overlapping_libs"]))
+                print(repo["name"] + " has overlapping libraries: " +
+                      ",".join(repo["overlapping_libs"]))
                 run_stats["overlapping"] += 1
 
-            if False and repo["has_package_lock"] == False and len(repo["overlapping_libs"]) == 0:
+            if repo["has_package_lock"] == False and len(repo["overlapping_libs"]) == 0:
                 repo_name = clone_repo_to_dir(
                     dataset_root, repo["url"], repo["name"])
 
-                repo_loc = os.path.join(dataset_root, repo_name)
+                try:
+                    repo_loc = os.path.join(dataset_root, repo_name)
 
-                package_json_loc = os.path.join(repo_loc, "package.json")
+                    package_json_loc = os.path.join(repo_loc, "package.json")
 
-                package_json = read_package_json(package_json_loc)
+                    package_json = read_package_json(package_json_loc)
 
-                for dependency_type in ["dependencies", "devDependencies"]:
-                    try:
-                        result = get_dependencies(
-                            package_json, dependency_type)
-                        libraries = result[0]
-                        dict_lib_versions = result[1]
+                    libraries = []
+                    dict_lib_versions = {}
+                    dict_lib_type = {}
 
-                        log_file_loc = os.path.join(
-                            "logs", repo_name + "_" + dependency_type + ".txt")
-                        log = open(log_file_loc, "w")
+                    for dependency_type in ["dependencies", "devDependencies"]:
+                        try:
+                            result = get_dependencies(
+                                package_json, dependency_type)
+                            # adding all dependent libraries in list
+                            libraries.extend(result[0])
+                            # adding all dependencies in dictionary
+                            dict_lib_versions.update(result[1])
+                            # tracking which lib comes from which type
+                            dict_lib_type.update(list_to_dict(
+                                result[0], dependency_type))
 
-                        libraries_str = "\t".join(libraries)
-                        log.write("Type" + "\t" + libraries_str + "\n")
+                        except Exception as ex:
+                            pass
 
-                        # mult = 1
-                        # for lib in libraries:
-                        # mult *= len(dict_lib_versions[lib])
-                        # print(mult)
+                    log_file_loc = os.path.join(
+                        "logs", repo_name + ".txt")
+                    log = open(log_file_loc, "w")
 
-                        library_combos = get_all_lib_combos(dict_lib_versions)
-                        for combo in library_combos:
+                    libraries_str = "\t".join(libraries)
+                    log.write(libraries_str + "\n")
 
-                            if(len(libraries) != len(combo)):
-                                raise Exception(
-                                    "Mismatch in no. of libraries and versions")
+                    # mult = 1
+                    # for lib in libraries:
+                    # mult *= len(dict_lib_versions[lib])
+                    # print(mult)
 
-                            if db_instance != "":
-                                add_combo_repo(
-                                    db_instance, libraries, combo, repo["url"])
+                    library_combos = get_all_lib_combos(
+                        dict_lib_versions)
+                    for combo in library_combos:
 
-                            update_package_json(
-                                package_json_loc, libraries, combo, dependency_type)
+                        if(len(libraries) != len(combo)):
+                            raise Exception(
+                                "Mismatch in no. of libraries and versions")
 
-                            project_path = repo_loc
+                        if db_instance != "":
+                            add_combo_repo(
+                                db_instance, libraries, combo, repo["url"])
+                        else:
+                            print("DATABASE CONNECTION FAILED")
 
-                            npm_install_result = execute_cmd(
-                                project_path, "npm install")
+                        update_package_json(
+                            package_json_loc, libraries, dict_lib_type, combo)
 
-                            if(npm_install_result[0]):
-                                build_project_result = execute_cmd(
-                                    project_path, "npm run build")
+                        project_path = repo_loc
 
-                                if(build_project_result[0] == False):
-                                    combo_str = "\t".join(combo)
-                                    log.write(dependency_type +
-                                              "\t" + combo_str + "\n")
+                        npm_install_result = execute_cmd(
+                            project_path, "npm install")
 
-                            # removing, even if partially installed
-                            remove_folder(project_path, "node_modules")
+                        if(npm_install_result[0]):
+                            build_project_result = execute_cmd(
+                                project_path, "npm run build")
 
-                        log.close()
+                            if(build_project_result[0] == False):
+                                combo_str = "\t".join(combo)
+                                log.write(combo_str + "\n")
 
-                    except Exception as ex:
-                        pass
+                        # removing, even if partially installed
+                        remove_folder(project_path, "node_modules")
 
-                # removing repo folder after working on it
-                remove_folder(dataset_root, repo_name)
-                break
+                    log.close()
+                except Exception as ex:
+                    raise ex
+                
+                finally:
+                    # removing repo folder after working on it
+                    remove_folder(dataset_root, repo_name)
+                    break
 
         except Exception as ex:
             print("Error processing repository => " + str(ex))
