@@ -398,7 +398,6 @@ if __name__ == "__main__":
                 finally:
                     # removing repo folder after working on it
                     remove_folder(dataset_root, repo_name)
-                    break
 
         except Exception as ex:
             print("Error processing repository => " + str(ex))

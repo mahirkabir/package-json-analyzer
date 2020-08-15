@@ -1,0 +1,1 @@
+c8	eslint	eslint-plugin-es	husky	iconv	lint-staged	mocha	prettier	unorm
