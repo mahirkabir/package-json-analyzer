@@ -86,8 +86,8 @@ class GitHelper:
                     no_of_dependencies += len(package_json[dependency_type])
 
             # only processing repos with build scripts
-            has_proper_build_scripts = True
-            if constants.TAG_SCRIPTS in package_json:
+            has_proper_build_scripts = constants.TAG_SCRIPTS in package_json
+            if has_proper_build_scripts: # checking further if the scripts are okay
                 scripts = package_json[constants.TAG_SCRIPTS]
                 if(len(scripts) == 0):
                     has_proper_build_scripts = False
