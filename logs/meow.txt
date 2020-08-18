@@ -1,5 +1,0 @@
-@types/minimist	camelcase-keys	decamelize-keys	hard-rejection	minimist-options	normalize-package-data	read-pkg-up	redent	trim-newlines	type-fest	yargs-parser	ava	execa	indent-string	tsd	xo
-1.2.0	6.2.2	1.1.0	2.1.0	4.1.0	2.5.0	7.0.1	3.0.0	3.0.0	0.13.1	18.1.3	2.4.0	4.0.0	4.0.0	0.11.0	0.30.0
-1.2.0	6.2.2	1.1.0	2.1.0	4.1.0	2.5.0	7.0.1	3.0.0	3.0.0	0.13.1	18.1.3	2.4.0	4.0.1	4.0.0	0.11.0	0.30.0
-1.2.0	6.2.2	1.1.0	2.1.0	4.1.0	2.5.0	7.0.1	3.0.0	3.0.0	0.13.1	18.1.3	2.4.0	4.0.2	4.0.0	0.11.0	0.30.0
-1.2.0	6.2.2	1.1.0	2.1.0	4.1.0	2.5.0	7.0.1	3.0.0	3.0.0	0.13.1	18.1.3	2.4.0	4.0.3	4.0.0	0.11.0	0.30.0

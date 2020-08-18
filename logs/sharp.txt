@@ -1,1 +1,0 @@
-color	detect-libc	node-addon-api	npmlog	prebuild-install	semver	simple-get	tar-fs	tunnel-agent	async	cc	decompress-zip	documentation	exif-reader	icc	license-checker	mocha	mock-fs	nyc	prebuild	prebuild-ci	rimraf	semistandard
