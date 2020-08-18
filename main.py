@@ -86,6 +86,7 @@ def get_dependency_names(str_package_json, dependency_type="dependencies"):
 
     return libraries
 
+
 def get_dependencies(str_package_json, dependency_type="dependencies"):
     libraries = []
     dict_lib_versions = {}
@@ -250,6 +251,13 @@ def collect_info(repo):
 
     return repo
 
+# checks if error is for missing build script
+
+
+def is_missing_build_script(error_message):
+    error_message = error_message.lower()
+    return constants.MISSING_SCRIPTS in error_message
+
 # tracks which library comes from which dependency type
 # sample input: ["lodash", "webpack"], "devDependency"
 # sample output: {"lodash": "devDependency", "webpack": "devDependency"}
@@ -259,6 +267,7 @@ def list_to_dict(libs, dep_type):
     sz = len(libs)
     dict = {libs[i]: dep_type for i in range(0, sz)}
     return dict
+
 
 if __name__ == "__main__":
 
@@ -360,6 +369,9 @@ if __name__ == "__main__":
 
                     library_combos = get_all_lib_combos(
                         dict_lib_versions)
+
+                    found_missing_build_script = False
+
                     for combo in library_combos:
 
                         if(len(libraries) != len(combo)):
@@ -387,20 +399,28 @@ if __name__ == "__main__":
                             if(build_project_result[0] == False):
                                 combo_str = "\t".join(combo)
                                 reason = build_project_result[1]
-                                reason = reason.replace("\n", "</ br>").replace("\t", "</ TAB>")
+                                reason = reason.replace(
+                                    "\n", "</ br>").replace("\t", "</ TAB>")
                                 log.write(combo_str + "\t" + reason + "\n")
+
+                                if is_missing_build_script(build_project_result[1]):
+                                    found_missing_build_script = True
 
                         # removing, even if partially installed
                         remove_folder(project_path, "node_modules")
 
+                        if found_missing_build_script:
+                            break
+
                     log.close()
                 except Exception as ex:
                     raise ex
-                
+
                 finally:
                     # removing repo folder after working on it
                     remove_folder(dataset_root, repo_name)
-                    print("# of processed repositories so far: " + str(run_stats["total"]))  
+                    print("# of processed repositories so far: " +
+                          str(run_stats["total"]))
 
         except Exception as ex:
             print("Error processing repository => " + str(ex))
