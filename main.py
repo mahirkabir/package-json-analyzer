@@ -9,6 +9,8 @@ import constants
 import os
 import os.path
 from db_helper import DBInstance
+from threading import Thread
+from datetime import datetime
 
 # ------------------------------------------
 # sample input: dict_lib_versions = {'libA': ['vA1', 'vA2', 'vA3'],
@@ -269,6 +271,129 @@ def list_to_dict(libs, dep_type):
     return dict
 
 
+# main process that runs in thread
+def process_repo(run_stats, repo, dataset_root, project_root, db_instance):
+    try:
+        print("Processing: " + repo["url"])
+        ts = datetime.now()
+
+        run_stats["total"] += 1
+
+        if(repo["has_package_lock"]):
+            print(repo["name"] + " has package-lock.json")
+            run_stats["package-lock"] += 1
+
+        if len(repo["overlapping_libs"]) > 0:
+            print(repo["name"] + " has overlapping libraries: " +
+                  ",".join(repo["overlapping_libs"]))
+            run_stats["overlapping"] += 1
+
+        if repo["has_package_lock"] == False and len(repo["overlapping_libs"]) == 0:
+            repo_name = clone_repo_to_dir(
+                dataset_root, repo["url"], repo["name"])
+
+            try:
+                repo_loc = os.path.join(dataset_root, repo_name)
+
+                package_json_loc = os.path.join(repo_loc, "package.json")
+
+                package_json = read_package_json(package_json_loc)
+
+                libraries = []
+                dict_lib_versions = {}
+                dict_lib_type = {}
+
+                for dependency_type in ["dependencies", "devDependencies"]:
+                    try:
+                        result = get_dependencies(
+                            package_json, dependency_type)
+                        # adding all dependent libraries in list
+                        libraries.extend(result[0])
+                        # adding all dependencies in dictionary
+                        dict_lib_versions.update(result[1])
+                        # tracking which lib comes from which type
+                        dict_lib_type.update(list_to_dict(
+                            result[0], dependency_type))
+
+                    except Exception as ex:
+                        pass
+
+                log_file_loc = os.path.join(
+                    project_root, "logs", repo_name + ".txt")
+                log = open(log_file_loc, "w")
+
+                libraries_str = "\t".join(libraries)
+                log.write(libraries_str + "\tReason\n")
+
+                # mult = 1
+                # for lib in libraries:
+                # mult *= len(dict_lib_versions[lib])
+                # print(mult)
+
+                library_combos = get_all_lib_combos(
+                    dict_lib_versions)
+
+                found_missing_script = False
+
+                for combo in library_combos:
+
+                    if(len(libraries) != len(combo)):
+                        raise Exception(
+                            "Mismatch in no. of libraries and versions")
+
+                    if db_instance != "":
+                        add_combo_repo(
+                            db_instance, libraries, combo, repo["url"])
+                    else:
+                        print("DATABASE CONNECTION FAILED")
+
+                    update_package_json(
+                        package_json_loc, libraries, dict_lib_type, combo)
+
+                    project_path = repo_loc
+
+                    npm_install_result = execute_cmd(
+                        project_path, "npm install")
+
+                    if(npm_install_result[0]):
+                        build_project_result = execute_cmd(
+                            project_path, "npm run build")
+
+                        if(build_project_result[0] == False):
+                            combo_str = "\t".join(combo)
+                            reason = build_project_result[1]
+                            reason = reason.replace(
+                                "\n", "</ br>").replace("\t", "</ TAB>")
+                            log.write(combo_str + "\t" + reason + "\n")
+
+                            if is_missing_script(build_project_result[1]):
+                                found_missing_script = True
+                                run_stats["missing-script"] += 1
+
+                    # removing, even if partially installed
+                    remove_folder(project_path, "node_modules")
+
+                    if found_missing_script:
+                        break
+
+                log.close()
+            except Exception as ex:
+                raise ex
+
+            finally:
+                # removing repo folder after working on it
+                remove_folder(dataset_root, repo_name)
+
+                te = datetime.now()
+                print("Processed " + repo_name + ". Time: " + str(te - ts))
+
+                print("# of processed repositories so far: " +
+                      str(run_stats["total"]))
+
+    except Exception as ex:
+        print("Error processing repository => " + str(ex))
+
+
 if __name__ == "__main__":
 
     # github = GitHelper("dependencies")
@@ -296,6 +421,7 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read("config.ini")
     dataset_root = config.get("PATHS", "DATESET_PATH")
+    project_root = config.get("PATHS", "PROJECT_PATH")
 
     db_config = config["DB CONNECT"]
     password = db_config["PASSWORD"]
@@ -308,126 +434,50 @@ if __name__ == "__main__":
     except Exception as ex:
         db_instance = ""
 
-    run_stats = {"total": 0, "package-lock": 0, "overlapping": 0, "missing-script": 0}
+    run_stats = {"total": 0, "package-lock": 0,
+                 "overlapping": 0, "missing-script": 0}
 
     for repo in repositories:
-        try:
-            print("Processing: " + repo["url"])
+        # creating log file out of thread
+        log_file_loc = os.path.join(
+            project_root, "logs", repo["name"] + ".txt")
+        log = open(log_file_loc, "w")
+        log.close()
 
-            run_stats["total"] += 1
+    ts_main = datetime.now()
 
-            if(repo["has_package_lock"]):
-                print(repo["name"] + " has package-lock.json")
-                run_stats["package-lock"] += 1
+    threads = []
+    for repo in repositories:
+        thread = Thread(target=process_repo, args=(
+            run_stats, repo, dataset_root, project_root, db_instance))
 
-            if len(repo["overlapping_libs"]) > 0:
-                print(repo["name"] + " has overlapping libraries: " +
-                      ",".join(repo["overlapping_libs"]))
-                run_stats["overlapping"] += 1
+        ts_limit = datetime.now()
+        # looking for free memory
+        while(True):
+            try:
+                tnow_limit = datetime.now()
+                diff = tnow_limit - ts_limit
+                diff_seconds = diff.total_seconds()
+                diff_minutes = diff_seconds / 60
+                if(diff_minutes >= constants.STOP_SEARCHING_FREE_MEMORY):
+                    print(
+                        repo["name"] + " is taking to long to find free memory. Skipping.")
+                    break
 
-            if repo["has_package_lock"] == False and len(repo["overlapping_libs"]) == 0:
-                repo_name = clone_repo_to_dir(
-                    dataset_root, repo["url"], repo["name"])
+                thread.start()
+                break
+            except Exception as ex:
+                pass
 
-                try:
-                    repo_loc = os.path.join(dataset_root, repo_name)
+        threads.append(thread)
 
-                    package_json_loc = os.path.join(repo_loc, "package.json")
+    for thread in threads:
+        thread.join()
 
-                    package_json = read_package_json(package_json_loc)
-
-                    libraries = []
-                    dict_lib_versions = {}
-                    dict_lib_type = {}
-
-                    for dependency_type in ["dependencies", "devDependencies"]:
-                        try:
-                            result = get_dependencies(
-                                package_json, dependency_type)
-                            # adding all dependent libraries in list
-                            libraries.extend(result[0])
-                            # adding all dependencies in dictionary
-                            dict_lib_versions.update(result[1])
-                            # tracking which lib comes from which type
-                            dict_lib_type.update(list_to_dict(
-                                result[0], dependency_type))
-
-                        except Exception as ex:
-                            pass
-
-                    log_file_loc = os.path.join(
-                        "logs", repo_name + ".txt")
-                    log = open(log_file_loc, "w")
-
-                    libraries_str = "\t".join(libraries)
-                    log.write(libraries_str + "\tReason\n")
-
-                    # mult = 1
-                    # for lib in libraries:
-                    # mult *= len(dict_lib_versions[lib])
-                    # print(mult)
-
-                    library_combos = get_all_lib_combos(
-                        dict_lib_versions)
-
-                    found_missing_script = False
-
-                    for combo in library_combos:
-
-                        if(len(libraries) != len(combo)):
-                            raise Exception(
-                                "Mismatch in no. of libraries and versions")
-
-                        if db_instance != "":
-                            add_combo_repo(
-                                db_instance, libraries, combo, repo["url"])
-                        else:
-                            print("DATABASE CONNECTION FAILED")
-
-                        update_package_json(
-                            package_json_loc, libraries, dict_lib_type, combo)
-
-                        project_path = repo_loc
-
-                        npm_install_result = execute_cmd(
-                            project_path, "npm install")
-
-                        if(npm_install_result[0]):
-                            build_project_result = execute_cmd(
-                                project_path, "npm run build")
-
-                            if(build_project_result[0] == False):
-                                combo_str = "\t".join(combo)
-                                reason = build_project_result[1]
-                                reason = reason.replace(
-                                    "\n", "</ br>").replace("\t", "</ TAB>")
-                                log.write(combo_str + "\t" + reason + "\n")
-
-                                if is_missing_script(build_project_result[1]):
-                                    found_missing_script = True
-                                    run_stats["missing-script"] += 1
-
-                        # removing, even if partially installed
-                        remove_folder(project_path, "node_modules")
-
-                        if found_missing_script:
-                            break
-
-                    log.close()
-                except Exception as ex:
-                    raise ex
-
-                finally:
-                    # removing repo folder after working on it
-                    remove_folder(dataset_root, repo_name)
-                    print("# of processed repositories so far: " +
-                          str(run_stats["total"]))
-
-        except Exception as ex:
-            print("Error processing repository => " + str(ex))
+    te_main = datetime.now()
 
     print("-------------------------------")
-    print("Process completed")
+    print("Process completed. Time: " + str(te_main - ts_main))
     print("# of Total processed repositories: " + str(run_stats["total"]))
     print("# of repositories having package-lock.json: " +
           str(run_stats["package-lock"]))
