@@ -351,7 +351,7 @@ if __name__ == "__main__":
                     log = open(log_file_loc, "w")
 
                     libraries_str = "\t".join(libraries)
-                    log.write(libraries_str + "\n")
+                    log.write(libraries_str + "\tReason\n")
 
                     # mult = 1
                     # for lib in libraries:
@@ -386,7 +386,9 @@ if __name__ == "__main__":
 
                             if(build_project_result[0] == False):
                                 combo_str = "\t".join(combo)
-                                log.write(combo_str + "\n")
+                                reason = build_project_result[1]
+                                reason = reason.replace("\n", "</ br>").replace("\t", "</ TAB>")
+                                log.write(combo_str + "\t" + reason + "\n")
 
                         # removing, even if partially installed
                         remove_folder(project_path, "node_modules")
@@ -398,6 +400,7 @@ if __name__ == "__main__":
                 finally:
                     # removing repo folder after working on it
                     remove_folder(dataset_root, repo_name)
+                    print("# of processed repositories so far: " + str(run_stats["total"]))  
 
         except Exception as ex:
             print("Error processing repository => " + str(ex))
