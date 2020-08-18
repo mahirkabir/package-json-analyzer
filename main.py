@@ -251,10 +251,10 @@ def collect_info(repo):
 
     return repo
 
-# checks if error is for missing build script
+# checks if error is for missing script (any script - build, start etc.)
 
 
-def is_missing_build_script(error_message):
+def is_missing_script(error_message):
     error_message = error_message.lower()
     return constants.MISSING_SCRIPTS in error_message
 
@@ -308,7 +308,7 @@ if __name__ == "__main__":
     except Exception as ex:
         db_instance = ""
 
-    run_stats = {"total": 0, "package-lock": 0, "overlapping": 0}
+    run_stats = {"total": 0, "package-lock": 0, "overlapping": 0, "missing-script": 0}
 
     for repo in repositories:
         try:
@@ -370,7 +370,7 @@ if __name__ == "__main__":
                     library_combos = get_all_lib_combos(
                         dict_lib_versions)
 
-                    found_missing_build_script = False
+                    found_missing_script = False
 
                     for combo in library_combos:
 
@@ -403,13 +403,14 @@ if __name__ == "__main__":
                                     "\n", "</ br>").replace("\t", "</ TAB>")
                                 log.write(combo_str + "\t" + reason + "\n")
 
-                                if is_missing_build_script(build_project_result[1]):
-                                    found_missing_build_script = True
+                                if is_missing_script(build_project_result[1]):
+                                    found_missing_script = True
+                                    run_stats["missing-script"] += 1
 
                         # removing, even if partially installed
                         remove_folder(project_path, "node_modules")
 
-                        if found_missing_build_script:
+                        if found_missing_script:
                             break
 
                     log.close()
@@ -432,4 +433,6 @@ if __name__ == "__main__":
           str(run_stats["package-lock"]))
     print("# of repositories having overlapping libraries in dependencies and devDependencies: " +
           str(run_stats["overlapping"]))
+    print("# of repositories missing script (build, start etc.): " +
+          str(run_stats["missing-script"]))
     print("-------------------------------")
