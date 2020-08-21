@@ -204,7 +204,7 @@ def add_combo_repo(db_instance, libraries, combo, url):
 
 
 def get_npm_rank_repos():
-    reader = open("npm_rank.txt", "r")
+    reader = open(os.path.join("data", "npm_rank", "npm_rank_ok.txt"), "r")
 
     repo_lines = reader.readlines()
     npm_rank_repos = []
