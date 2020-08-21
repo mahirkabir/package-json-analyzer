@@ -87,7 +87,7 @@ class GitHelper:
 
             # only processing repos with build scripts
             has_proper_build_scripts = constants.TAG_SCRIPTS in package_json
-            if has_proper_build_scripts: # checking further if the scripts are okay
+            if has_proper_build_scripts:  # checking further if the scripts are okay
                 scripts = package_json[constants.TAG_SCRIPTS]
                 if(len(scripts) == 0):
                     has_proper_build_scripts = False
@@ -122,3 +122,56 @@ class GitHelper:
         if(page.status_code == constants.ERROR_CODE_NOT_FOUND):
             return ""
         return page.content
+
+    # checks if repo has -
+    # 1. node-js project
+    # 2. dependencies
+    # 3. build scripts
+    # 4. package-lock file (if not, then good)
+
+    def get_repo_status(self, repo_url):
+        status = {"result": False, "node-js": False, "package-lock": False,
+                  "dependencies": False, "build-scripts": False}
+
+        repo_link = repo_url.replace("github.com", "raw.githubusercontent.com")
+        config_file = repo_link + "/master/package.json"
+
+        page = requests.get(config_file)
+
+        if(page.status_code == constants.ERROR_CODE_NOT_FOUND):
+            return status
+
+        try:
+            status["node-js"] = True
+
+            soup = BeautifulSoup(page.content, 'html.parser')
+            package_json = json.loads(soup.text)
+            no_of_dependencies = 0
+
+            # we are not counting repos with no dependencies
+            # package_json acts like a dictionary
+            for dependency_type in self.dependency_types:
+                if dependency_type in package_json:
+                    no_of_dependencies += len(package_json[dependency_type])
+
+            # any type of dependency is fine
+            status["dependencies"] = no_of_dependencies > 0
+
+            # only processing repos with build scripts (i.e. => "build": ...)
+            has_proper_build_scripts = False
+            if constants.TAG_SCRIPTS in package_json:  # checking further if the scripts are okay
+                scripts = package_json[constants.TAG_SCRIPTS]
+                if(len(scripts) > 0 and constants.TAG_BUILD_SCRIPTS in scripts):
+                    has_proper_build_scripts = True
+
+            status["build-scripts"] = has_proper_build_scripts
+
+            status["package-lock"] = self.has_package_lock(repo_url)
+
+            status["result"] = status["node-js"] and (
+                not status["package-lock"]) and status["build-scripts"] and status["dependencies"]
+
+            return status
+        except Exception as ex:
+            status["result"] = False
+            return status

@@ -1,0 +1,9 @@
+tslib	https://github.com/Microsoft/tslib
+fs	https://github.com/npm/security-holder
+crypto-js	https://github.com/brix/crypto-js
+progress	https://github.com/visionmedia/node-progress
+readline-sync	https://github.com/anseki/readline-sync
+normalize.css	https://github.com/necolas/normalize.css
+crypto	https://github.com/npm/deprecate-holder
+bignumber.js	https://github.com/MikeMcl/bignumber.js
+blessed	https://github.com/chjj/blessed
