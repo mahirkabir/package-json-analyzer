@@ -5,6 +5,7 @@ import re
 from git_helper import GitHelper
 import os
 from datetime import datetime
+import time
 
 # checks if the project has
 # 1. valid github url for node-js project [input url is npm site url]
@@ -48,8 +49,6 @@ def log_repos(repos, path):
 
 if __name__ == "__main__":
 
-    # ok_to_process_repos = []
-
     most_dependent_upon = "https://gist.githubusercontent.com/anvaka/8e8fa57c7ee1350e3491/raw/b6f3ebeb34c53775eea00b489a0cea2edd9ee49c/01.most-dependent-upon.md"
 
     page = requests.get(most_dependent_upon)
@@ -73,6 +72,11 @@ if __name__ == "__main__":
         processed_cnt = 0
         for repo in repositories:
             processed_cnt += 1
+
+            if((processed_cnt) % 100 == 0):
+                # for each 50 repos delaying 5 mins (5 * 60 = 300s to avoid request timeout)
+                time.sleep(300)
+
             try:
                 # group 0=> repo name, group 1=> url
                 result = is_ok_to_process(
@@ -102,7 +106,6 @@ if __name__ == "__main__":
                         not_node_js_repos.append([repo_name, repo_url])
             except Exception as ex:
                 print("Exception occurred for: " + repo[0])
-                
 
         log_folder = os.path.join("data", "npm_rank")
 
