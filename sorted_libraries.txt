@@ -1,289 +1,178 @@
-mkdirp	2
-semver	2
-eslint-plugin-import	2
-uglify-js	2
-compression	2
-lru-cache	2
-serve-favicon	2
-strip-ansi	2
-clean-css	2
-bcrypt	2
-send	2
-xtend	3
-stylus	3
-css	3
-react-dropzone	3
-long	3
-express_1	4
-meow	4
-eslint-config-airbnb	4
-webpack-dev-middleware	4
-xmldom	4
-pify	4
-should	4
-urijs	4
-joi	5
-json-loader	5
-source-map-support	6
-events	6
-postcss-flexbugs-fixes	7
-bulma	7
-sass-loader	8
-through	8
-nunjucks	8
-iconv-lite	9
-pretty-bytes	9
-jade	10
-event-stream	11
-coffee-script	12
-once	12
-vinyl-buffer	12
-through2	14
-karma-chrome-launcher	14
-jsonfile	17
-log-symbols	18
-object-assign	20
-path	20
-qs	20
-cors	20
-opener	21
-colors	22
-cli-table	24
-cross-env	27
-xml2json	27
-webpack-manifest-plugin	30
-mssql	30
-gulp	36
-invariant	36
-text-table	39
-redis	40
-utf8	40
-inherits	42
-sinon-chai	45
-gulp-imagemin	48
-http-server	48
-grunt-cli	54
-minimatch	60
-update-notifier	60
-gulp-rename	60
-cheerio	72
-command-line-args	84
-yosay	96
-sharp	96
-immutable	120
-pluralize	126
-deep-equal	126
-graceful-fs	138
-globby	150
-minimist	156
-eventemitter3	189
-koa-router	240
-figlet	240
-optimist	260
-dotenv	276
-del	288
-raf	300
-safe-buffer	342
-rsvp	360
-ip	380
-rimraf	420
-ora	420
-tweetnacl	432
-eslint-plugin-jsx-a11y	445
-css-loader	512
-terser-webpack-plugin	512
-grunt-contrib-uglify	516
-tmp	540
-moment-timezone	556
-request-promise-native	560
-which	576
-sequelize	600
-debug	672
-query-string	684
-util	810
-concat-stream	1080
-grunt	1440
-loader-utils	1512
-commander	1600
-cli-color	1620
-opn	1680
-open	1680
-archiver	1728
-jsdom	1920
-chalk	1944
-winston	2160
-eventemitter2	2160
-got	2688
-rollup	2700
-nan	5280
-eslint-plugin-standard	5472
-request-promise	5600
-style-loader	8192
-file-saver	9126
-underscore.string	9180
-html-webpack-plugin	11760
-socket.io	12096
-@polymer/polymer	12096
-co	12100
-@alifd/next	18720
-warning	19488
-node-fetch	21600
-ejs	25728
-autoprefixer	28160
-webpack	31104
-deepmerge	49140
-require-dir	56000
-phantomjs-prebuilt	57330
-phantomjs	57330
-html-entities	59904
-jsonwebtoken	63360
-prop-types	69120
-socket.io-client	75600
-whatwg-fetch	96768
-ws	109512
-sw-precache-webpack-plugin	113400
-shortid	120960
-gulp-sourcemaps	127008
-es6-promise	218880
-execa	258048
-pg	303450
-mz	322560
-chai	342000
-fs-extra	362880
-eslint-plugin-promise	362880
-karma-jasmine	369600
-eslint-loader	403200
-vinyl	415800
-less-loader	442368
-webpack-bundle-analyzer	576000
-superagent	663552
-gulp-concat	680400
-cross-spawn	933120
-file-loader	1296000
-nconf	1360800
-underscore	1555200
-glob	1722240
-copy-webpack-plugin	1728000
-node-sass	2376000
-multer	2626560
-chokidar	3048192
-mime	3345672
-standard	5225472
-isomorphic-fetch	10028200
-tslint	10160640
-nyc	12386304
-https-proxy-agent	12817440
-promise	17928000
-path-to-regexp	24212520
-http-proxy	24675840
-js-yaml	27998208
-koa	33592320
-esprima	34332984
-url-loader	36391680
-eslint-plugin-flowtype	42336000
-rxjs	55977600
-react-dev-utils	57283200
-babel-preset-react-app	57283200
-eslint-config-react-app	57283200
-react-scripts	57283200
-babel-plugin-named-asset-import	57283200
-log4js	58613760
-inquirer	71221248
-xml2js	75398400
-babel-preset-env	119439360
-shelljs	122872464
-react-icons	130233600
-postcss-loader	310464000
-vinyl-fs	453600000
-enzyme	580942530
-raw-loader	592220160
-identity-obj-proxy	987840000
-redux-logger	1348485120
-react-native	1517322240
-highlight.js	3450470400
-sinon	5822668800
-eslint	5945425920
-babel-plugin-transform-decorators-legacy	6618931200
-webpack-hot-middleware	10537758720
-serialport	24883200000
-reflect-metadata	30670848000
-config	57448971216
-postcss-safe-parser	110361968640
-webpack-dev-server	142655385600
-highland	144160321536
-@angular/cdk	261213880320
-gulp-sass	299576309760
-husky	347651740800
-ember-cli-babel	477757440000
-dot	504367940608
-postcss-preset-env	715138744320
-gulp-uglify	759748429440
-form-data	1006428487680
-mocha	1741425868800
-extract-text-webpack-plugin	1851776640000
-xmlbuilder	2176502227200
-babel-plugin-import	2354307379200
-validator	4865195073024
-react-transition-group	4907589120000
-markdown-it	5888802816000
-lodash	12130449408000
-lodash.merge	12130449408000
-lodash.get	12130449408000
-lodash.debounce	12130449408000
-lodash.isequal	12130449408000
-lodash-es	12130449408000
-lodash.uniq	12130449408000
-lodash.map	12130449408000
-lodash.foreach	12130449408000
-lodash.flatten	12130449408000
-mongodb	12685355827200
-github	34954135856640
-@octokit/rest	34954135856640
-axios	81830891520000
-postcss	114381401702400
-yeoman-generator	144886632284160
-readable-stream	282291609600000
-mobx	367763022102528
-yargs	941755465728000
-browser-sync	2151240317160480
-gulp-util	2589704732160000
-async	16686729658368000
-vuex	55475282903040000
-popper.js	98315653201920000
-request	133120783635840000
-rx	149525415360921600
-ajv	263941279747891200
-webpack-cli	323092546191360000
-mini-css-extract-plugin	566570552131584000
-ts-node	789416218696089600
-hoist-non-react-statics	794567854080000000
-react-helmet	2028099825303552000
-babel-loader	12520197468979200000
-bluebird	16454266536444282000
-fork-ts-checker-webpack-plugin	21968475058962432000
-babel-plugin-lodash	28688938077310156800
-uglifyjs-webpack-plugin	29593434222084096000
-vue-router	3137004995412787200000
-redux	5230417641097678848000
-babel-eslint	87278696426729808000000
-react-markdown	238112420428937134080000
-redux-thunk	10713732494954065920000000
-browserify	24222619283476682686464000
-soap	1479970502831717380915200000
-handlebars	33401599377415084995379200000
-react-redux	147672069396580270080000000000
-react-datepicker	11607536658614580695531520000000
-react-hot-loader	30921713944532820541440000000000
-date-fns	221430148188058236862955520000000
-react-router-redux	2441963532848677011062784000000000
-styled-components	33689021620760248981961834496000000
-element-ui	1183292860884478349719633920000000000
-ts-loader	14111560931651381383209890611200000000
-reactstrap	14995704459552692935711809236631552000
-d3	74812859444101125408673467727872000000000
-recompose	2732784543113880806998307094461939712000000
-react-slick	12162838887834147240664671387655549747200000
-vue	238141215289754712113169394783113989336963481600
-vue-template-compiler	238141215289754712113169394783113989336963481600
-react-select	343918922429646029292351792992239925329920000000000
-antd	2621683770124811276336627899732723344877970769014905896960000000000
+@phosphor/widgets	2	https://github.com/phosphorjs/phosphor
+global	3	https://github.com/Raynos/global
+slugify	3	https://github.com/simov/slugify
+jade	4	https://github.com/jadejs/jade
+bcryptjs	4	https://github.com/dcodeIO/bcrypt.js
+utf8	4	https://github.com/mathiasbynens/utf8.js
+isobject	4	https://github.com/jonschlinkert/isobject
+codemirror	5	https://github.com/codemirror/CodeMirror
+base64-js	5	https://github.com/beatgammit/base64-js
+is-plain-object	6	https://github.com/jonschlinkert/is-plain-object
+pg	7	https://github.com/brianc/node-postgres
+tweetnacl	7	https://github.com/dchest/tweetnacl-js
+bytebuffer	7	https://github.com/dcodeIO/bytebuffer.js
+babel-plugin-transform-decorators-legacy	9	https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy
+vue-property-decorator	9	https://github.com/kaorun343/vue-property-decorator
+backbone	10	https://github.com/jashkenas/backbone
+tslint-react	10	https://github.com/palantir/tslint-react
+html-entities	10	https://github.com/mdevils/node-html-entities
+react-lifecycles-compat	10	https://github.com/reactjs/react-lifecycles-compat
+underscore.string	11	https://github.com/epeli/underscore.string
+sync-request	11	https://github.com/ForbesLindesay/sync-request
+acorn	12	https://github.com/acornjs/acorn
+pngjs	12	https://github.com/lukeapage/pngjs
+prop-types	13	https://github.com/facebook/prop-types
+escodegen	14	https://github.com/estools/escodegen
+assert	14	https://github.com/browserify/commonjs-assert
+async-validator	14	https://github.com/yiminghe/async-validator
+he	14	https://github.com/mathiasbynens/he
+postcss-normalize	14	https://github.com/csstools/postcss-normalize
+reflect-metadata	15	https://github.com/rbuckton/reflect-metadata
+validator	15	https://github.com/chriso/validator.js
+@jupyterlab/application	15	https://github.com/jupyterlab/jupyterlab
+should	16	https://github.com/shouldjs/should.js
+xlsx	16	https://github.com/SheetJS/sheetjs
+simple-git	17	https://github.com/steveukx/git-js
+eslint-plugin-node	17	https://github.com/mysticatea/eslint-plugin-node
+https-proxy-agent	17	https://github.com/TooTallNate/node-https-proxy-agent
+jest-environment-jsdom-fourteen	17	https://github.com/ianschmitz/jest-environment-jsdom-fourteen
+shortid	18	https://github.com/dylang/shortid
+node-fetch	19	https://github.com/bitinn/node-fetch
+babel-plugin-import	19	https://github.com/ant-design/babel-plugin-import
+systemjs	20	https://github.com/systemjs/systemjs
+promise-polyfill	20	https://github.com/taylorhakes/promise-polyfill
+hoist-non-react-statics	21	https://github.com/mridgway/hoist-non-react-statics
+flux	21	https://github.com/facebook/flux
+eslint-plugin-flowtype	22	https://github.com/gajus/eslint-plugin-flowtype
+postcss-safe-parser	22	https://github.com/postcss/postcss-safe-parser
+hammerjs	22	https://github.com/hammerjs/hammer.js
+rc-slider	22	https://github.com/react-component/slider
+react-dev-utils	23	https://github.com/facebook/create-react-app
+babel-preset-react-app	23	https://github.com/facebook/create-react-app
+eslint-config-react-app	23	https://github.com/facebook/create-react-app
+react-scripts	23	https://github.com/facebook/create-react-app
+babel-plugin-named-asset-import	23	https://github.com/facebook/create-react-app
+react-app-polyfill	23	https://github.com/facebook/create-react-app
+@oclif/command	23	https://github.com/oclif/command
+memoize-one	23	https://github.com/alexreardon/memoize-one
+react-error-overlay	23	https://github.com/facebook/create-react-app
+babel-plugin-dynamic-import-node	23	https://github.com/airbnb/babel-plugin-dynamic-import-node
+es6-promise	24	https://github.com/stefanpenner/es6-promise
+@oclif/config	24	https://github.com/oclif/config
+graphql-tools	24	https://github.com/ardatan/graphql-tools
+jshint	24	https://github.com/jshint/jshint
+jest-watch-typeahead	24	https://github.com/jest-community/jest-watch-typeahead
+raven	24	https://github.com/getsentry/raven-js
+vuex	25	https://github.com/vuejs/vuex
+babel-plugin-add-module-exports	25	https://github.com/59naga/babel-plugin-add-module-exports
+leaflet	25	https://github.com/Leaflet/Leaflet
+react-native-vector-icons	25	https://github.com/oblador/react-native-vector-icons
+gulp-shell	25	https://github.com/sun-zheng-an/gulp-shell
+node-forge	26	https://github.com/digitalbazaar/forge
+babel-plugin-transform-react-remove-prop-types	26	https://github.com/oliviertassinari/babel-plugin-transform-react-remove-prop-types
+immer	26	https://github.com/immerjs/immer
+babel-loader	27	https://github.com/babel/babel-loader
+clean-webpack-plugin	27	https://github.com/johnagan/clean-webpack-plugin
+babylon	27	https://github.com/babel/babylon
+rsvp	27	https://github.com/tildeio/rsvp.js
+ethereumjs-util	27	https://github.com/ethereumjs/ethereumjs-util
+node-sass	28	https://github.com/sass/node-sass
+http-proxy-middleware	29	https://github.com/chimurai/http-proxy-middleware
+dayjs	29	https://github.com/iamkun/dayjs
+react-onclickoutside	29	https://github.com/Pomax/react-onclickoutside
+vue-router	30	https://github.com/vuejs/vue-router
+ajv	30	https://github.com/ajv-validator/ajv
+@oclif/plugin-help	30	https://github.com/oclif/plugin-help
+cosmiconfig	30	https://github.com/davidtheclark/cosmiconfig
+ethereumjs-tx	31	https://github.com/ethereumjs/ethereumjs-tx
+nunjucks	32	https://github.com/mozilla/nunjucks
+redux-actions	32	https://github.com/redux-utilities/redux-actions
+eslint-plugin-jsx-a11y	33	https://github.com/evcohen/eslint-plugin-jsx-a11y
+@typescript-eslint/parser	33	https://github.com/typescript-eslint/typescript-eslint
+@typescript-eslint/eslint-plugin	33	https://github.com/typescript-eslint/typescript-eslint
+vue-class-component	33	https://github.com/vuejs/vue-class-component
+awesome-typescript-loader	33	https://github.com/s-panferov/awesome-typescript-loader
+koa	34	https://github.com/koajs/koa
+fast-glob	34	https://github.com/mrmlnc/fast-glob
+axios	36	https://github.com/axios/axios
+mobx	36	https://github.com/mobxjs/mobx
+jimp	36	https://github.com/oliver-moran/jimp
+react-router-dom	37	https://github.com/ReactTraining/react-router
+react-router	37	https://github.com/ReactTraining/react-router
+eslint-plugin-jest	37	https://github.com/jest-community/eslint-plugin-jest
+react-router-redux	38	https://github.com/reactjs/react-router-redux
+fuse.js	38	https://github.com/krisk/Fuse
+localforage	39	https://github.com/localForage/localForage
+enzyme	40	https://github.com/airbnb/enzyme
+enzyme-adapter-react-16	40	https://github.com/enzymejs/enzyme
+jquery	41	https://github.com/jquery/jquery
+draft-js	41	https://github.com/facebook/draft-js
+dom-helpers	41	https://github.com/react-bootstrap/dom-helpers
+fork-ts-checker-webpack-plugin-alt	41	https://github.com/Timer/fork-ts-checker-webpack-plugin
+intl	41	https://github.com/andyearnshaw/Intl.js
+quill	41	https://github.com/quilljs/quill
+got	43	https://github.com/sindresorhus/got
+ts-loader	43	https://github.com/TypeStrong/ts-loader
+throttle-debounce	43	https://github.com/niksy/throttle-debounce
+mobx-react	43	https://github.com/mobxjs/mobx-react
+polished	43	https://github.com/styled-components/polished
+history	44	https://github.com/ReactTraining/history
+superagent	46	https://github.com/visionmedia/superagent
+popper.js	46	https://github.com/FezVrasta/popper.js
+react-transition-group	47	https://github.com/reactjs/react-transition-group
+postcss-preset-env	47	https://github.com/csstools/postcss-preset-env
+core-js	49	https://github.com/zloirock/core-js
+styled-components	49	https://github.com/styled-components/styled-components
+vue-loader	49	https://github.com/vuejs/vue-loader
+fork-ts-checker-webpack-plugin	50	https://github.com/TypeStrong/fork-ts-checker-webpack-plugin
+cli-ux	51	https://github.com/oclif/cli-ux
+eslint-plugin-import	52	https://github.com/benmosher/eslint-plugin-import
+ember-cli-babel	53	https://github.com/babel/ember-cli-babel
+react-hot-loader	53	https://github.com/gaearon/react-hot-loader
+react-slick	55	https://github.com/akiran/react-slick
+react-motion	56	https://github.com/chenglou/react-motion
+reactstrap	57	https://github.com/reactstrap/reactstrap
+ember-cli-htmlbars	59	https://github.com/ember-cli/ember-cli-htmlbars
+@babel/runtime	60	https://github.com/babel/babel
+@babel/core	60	https://github.com/babel/babel
+@babel/preset-env	60	https://github.com/babel/babel
+@babel/polyfill	60	https://github.com/babel/babel
+@babel/plugin-proposal-class-properties	60	https://github.com/babel/babel
+@babel/preset-react	60	https://github.com/babel/babel
+@babel/plugin-transform-runtime	60	https://github.com/babel/babel
+@babel/cli	60	https://github.com/babel/babel
+@babel/plugin-proposal-decorators	60	https://github.com/babel/babel
+@babel/register	60	https://github.com/babel/babel
+@babel/types	60	https://github.com/babel/babel
+@babel/preset-typescript	60	https://github.com/babel/babel
+@babel/runtime-corejs2	60	https://github.com/babel/babel
+@babel/parser	60	https://github.com/babel/babel
+@babel/traverse	60	https://github.com/babel/babel
+@babel/plugin-proposal-export-default-from	60	https://github.com/babel/babel
+@babel/plugin-proposal-export-namespace-from	60	https://github.com/babel/babel
+babel-preset-env	61	https://github.com/babel/babel-preset-env
+react-virtualized	72	https://github.com/bvaughn/react-virtualized
+react-bootstrap	74	https://github.com/react-bootstrap/react-bootstrap
+react-datepicker	74	https://github.com/Hacker0x01/react-datepicker
+react-select	75	https://github.com/JedWatson/react-select
+jest	76	https://github.com/facebook/jest
+babel-jest	76	https://github.com/facebook/jest
+jest-resolve	76	https://github.com/facebook/jest
+pouchdb	77	https://github.com/pouchdb/pouchdb
+bizcharts	81	https://github.com/alibaba/BizCharts
+firebase	87	https://github.com/firebase/firebase-js-sdk
+react	89	https://github.com/facebook/react
+react-dom	89	https://github.com/facebook/react
+create-react-class	89	https://github.com/facebook/react
+eslint-plugin-react-hooks	89	https://github.com/facebook/react
+react-addons-css-transition-group	89	https://github.com/facebook/react
+react-test-renderer	89	https://github.com/facebook/react
+react-addons-shallow-compare	89	https://github.com/facebook/react
+prettier	105	https://github.com/prettier/prettier
+semantic-ui-react	107	https://github.com/Semantic-Org/Semantic-UI-React
+@alifd/next	117	https://github.com/alibaba-fusion/next
+@angular/cdk	120	https://github.com/angular/components
+@angular/material	120	https://github.com/angular/components
+@angular-devkit/core	167	https://github.com/angular/angular-cli
+@angular-devkit/schematics	167	https://github.com/angular/angular-cli
+antd	176	https://github.com/ant-design/ant-design

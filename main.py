@@ -400,6 +400,20 @@ if __name__ == "__main__":
     # repositories = github.get_ok_to_process_repos()
 
     repositories = get_npm_rank_repos()
+
+    if False:
+        # this block will only be active when combo count needs to be calculated
+        log = open("library_combo.txt", "w")
+        helper = GitHelper()
+
+        for repo in repositories:
+            no_of_deps = helper.get_no_of_dependencies(repo["url"])
+            log.write(repo["name"] + "\t" +
+                      str(no_of_deps) + "\t" + repo["url"])
+            log.write("\n")
+
+        log.close()
+
     dict_repo_count = get_dict_repo_count()  # has count of # of possible combos
     # TODO: Need to update it, because it is read from file and is not updated automatically
 

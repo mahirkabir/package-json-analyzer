@@ -8,7 +8,7 @@ import json
 
 class GitHelper:
 
-    def __init__(self, dependency_types="dependencies", api_url="https://api.github.com/search/repositories?q=%20language:javascript+created:{start_date}..{end_date}&sort=stars&order=desc&type=repository&page={page_no}&order={order}"):
+    def __init__(self, dependency_types=["dependencies", "devDependencies"], api_url="https://api.github.com/search/repositories?q=%20language:javascript+created:{start_date}..{end_date}&sort=stars&order=desc&type=repository&page={page_no}&order={order}"):
         self.api_url = api_url
         self.ok_to_process_repos = []
         self.date_format = "%Y-%m-%" + "d"
@@ -175,3 +175,27 @@ class GitHelper:
         except Exception as ex:
             status["result"] = False
             return status
+
+    def get_no_of_dependencies(self, repo_url):
+        repo_link = repo_url.replace("github.com", "raw.githubusercontent.com")
+        config_file = repo_link + "/master/package.json"
+
+        page = requests.get(config_file)
+
+        if(page.status_code == constants.ERROR_CODE_NOT_FOUND):
+            return -1
+
+        try:
+            soup = BeautifulSoup(page.content, 'html.parser')
+            package_json = json.loads(soup.text)
+            no_of_dependencies = 0
+
+            # we are not counting repos with no dependencies
+            # package_json acts like a dictionary
+            for dependency_type in self.dependency_types:
+                if dependency_type in package_json:
+                    no_of_dependencies += len(package_json[dependency_type])
+
+            return no_of_dependencies
+        except Exception as ex:
+            return -1
