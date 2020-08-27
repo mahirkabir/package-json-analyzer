@@ -1,0 +1,796 @@
+Processing: https://github.com/phosphorjs/phosphor
+69
+Processed @phosphor/widgets. Time: 0:00:17.215126
+# of processed repositories so far: 1
+Processing: https://github.com/Raynos/global
+11
+Processed global. Time: 0:00:15.846081
+# of processed repositories so far: 2
+Processing: https://github.com/simov/slugify
+1
+Processed slugify. Time: 0:00:05.505066
+# of processed repositories so far: 3
+Processing: https://github.com/jadejs/jade
+18
+Processed jade. Time: 0:00:10.963918
+# of processed repositories so far: 4
+Processing: https://github.com/dcodeIO/bcrypt.js
+1
+Processed bcryptjs. Time: 0:00:02.088225
+# of processed repositories so far: 5
+Processing: https://github.com/mathiasbynens/utf8.js
+40
+Processed utf8. Time: 0:00:05.993236
+# of processed repositories so far: 6
+Processing: https://github.com/jonschlinkert/isobject
+7040
+Processed isobject. Time: 0:00:06.447063
+# of processed repositories so far: 7
+Processing: https://github.com/codemirror/CodeMirror
+54
+Processed codemirror. Time: 0:00:14.894875
+# of processed repositories so far: 8
+Processing: https://github.com/beatgammit/base64-js
+1
+Processed base64-js. Time: 0:00:06.536081
+# of processed repositories so far: 9
+Processing: https://github.com/jonschlinkert/is-plain-object
+240
+Processed is-plain-object. Time: 0:00:08.561497
+# of processed repositories so far: 10
+Processing: https://github.com/brianc/node-postgres
+303450
+Processed pg. Time: 0:00:19.455327
+# of processed repositories so far: 11
+Processing: https://github.com/dchest/tweetnacl-js
+468
+Processed tweetnacl. Time: 0:00:09.884293
+# of processed repositories so far: 12
+Processing: https://github.com/dcodeIO/bytebuffer.js
+14400
+Processed bytebuffer. Time: 0:00:09.475056
+# of processed repositories so far: 13
+Processing: https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy
+6618931200
+Processed babel-plugin-transform-decorators-legacy. Time: 0:00:11.562764
+# of processed repositories so far: 14
+Processing: https://github.com/kaorun343/vue-property-decorator
+1462812624
+Processed vue-property-decorator. Time: 0:00:11.785986
+# of processed repositories so far: 15
+Processing: https://github.com/jashkenas/backbone
+54600000
+Processed backbone. Time: 0:00:17.071101
+# of processed repositories so far: 16
+Processing: https://github.com/palantir/tslint-react
+504
+Processed tslint-react. Time: 0:00:16.486489
+# of processed repositories so far: 17
+Processing: https://github.com/mdevils/node-html-entities
+59904
+Processed html-entities. Time: 0:00:13.450348
+# of processed repositories so far: 18
+Processing: https://github.com/reactjs/react-lifecycles-compat
+2856000
+Processed react-lifecycles-compat. Time: 0:00:17.681106
+# of processed repositories so far: 19
+Processing: https://github.com/epeli/underscore.string
+9180
+Processed underscore.string. Time: 0:00:15.280331
+# of processed repositories so far: 20
+Processing: https://github.com/ForbesLindesay/sync-request
+16127424000
+Processed sync-request. Time: 0:00:13.427271
+# of processed repositories so far: 21
+Processing: https://github.com/acornjs/acorn
+1
+Processed acorn. Time: 0:00:12.301621
+# of processed repositories so far: 22
+Processing: https://github.com/lukeapage/pngjs
+1
+Processed pngjs. Time: 0:00:17.205042
+# of processed repositories so far: 23
+Processing: https://github.com/facebook/prop-types
+69120
+Processed prop-types. Time: 0:00:19.297813
+# of processed repositories so far: 24
+Processing: https://github.com/estools/escodegen
+5808
+Processed escodegen. Time: 0:00:22.027719
+# of processed repositories so far: 25
+Processing: https://github.com/browserify/commonjs-assert
+6310310400
+Processed assert. Time: 0:00:23.522740
+# of processed repositories so far: 26
+Processing: https://github.com/yiminghe/async-validator
+11427840
+Processed async-validator. Time: 0:00:27.140473
+# of processed repositories so far: 27
+Processing: https://github.com/mathiasbynens/he
+2298240
+Processed he. Time: 0:00:19.612741
+# of processed repositories so far: 28
+Processing: https://github.com/csstools/postcss-normalize
+19869696
+Processed postcss-normalize. Time: 0:00:22.604502
+# of processed repositories so far: 29
+Processing: https://github.com/rbuckton/reflect-metadata
+30670848000
+Processed reflect-metadata. Time: 0:00:22.374053
+# of processed repositories so far: 30
+Processing: https://github.com/chriso/validator.js
+5150208780288
+Processed validator. Time: 0:00:18.712728
+# of processed repositories so far: 31
+Processing: https://github.com/jupyterlab/jupyterlab
+1814400
+Processed @jupyterlab/application. Time: 0:00:47.538963
+# of processed repositories so far: 32
+Processing: https://github.com/shouldjs/should.js
+4
+Processed should. Time: 0:00:13.791156
+# of processed repositories so far: 33
+Processing: https://github.com/SheetJS/sheetjs
+568
+Processed xlsx. Time: 0:00:30.545942
+# of processed repositories so far: 34
+Processing: https://github.com/steveukx/git-js
+106928640
+Processed simple-git. Time: 0:00:26.196894
+# of processed repositories so far: 35
+Processing: https://github.com/mysticatea/eslint-plugin-node
+3264
+Processed eslint-plugin-node. Time: 0:00:15.126620
+# of processed repositories so far: 36
+Processing: https://github.com/TooTallNate/node-https-proxy-agent
+13115520
+Processed https-proxy-agent. Time: 0:00:21.126665
+# of processed repositories so far: 37
+Processing: https://github.com/ianschmitz/jest-environment-jsdom-fourteen
+2462451425280
+Processed jest-environment-jsdom-fourteen. Time: 0:00:20.270001
+# of processed repositories so far: 38
+Processing: https://github.com/dylang/shortid
+145152
+Processed shortid. Time: 0:00:26.107185
+# of processed repositories so far: 39
+Processing: https://github.com/bitinn/node-fetch
+57600
+Processed node-fetch. Time: 0:00:23.515071
+# of processed repositories so far: 40
+Processing: https://github.com/ant-design/babel-plugin-import
+14765690880000
+Processed babel-plugin-import. Time: 0:00:22.630409
+# of processed repositories so far: 41
+Processing: https://github.com/systemjs/systemjs
+218350080
+Processed systemjs. Time: 0:00:30.856927
+# of processed repositories so far: 42
+Processing: https://github.com/taylorhakes/promise-polyfill
+20660355072000
+Processed promise-polyfill. Time: 0:00:28.358335
+# of processed repositories so far: 43
+Processing: https://github.com/mridgway/hoist-non-react-statics
+855688458240000000
+Processed hoist-non-react-statics. Time: 0:00:38.730930
+# of processed repositories so far: 44
+Processing: https://github.com/facebook/flux
+395583160320
+Processed flux. Time: 0:00:34.419078
+# of processed repositories so far: 45
+Processing: https://github.com/gajus/eslint-plugin-flowtype
+108864000
+Processed eslint-plugin-flowtype. Time: 0:00:34.423512
+# of processed repositories so far: 46
+Processing: https://github.com/postcss/postcss-safe-parser
+1
+Processed postcss-safe-parser. Time: 0:00:30.481541
+# of processed repositories so far: 47
+Processing: https://github.com/hammerjs/hammer.js
+1
+Processed hammerjs. Time: 0:00:17.101364
+# of processed repositories so far: 48
+Processing: https://github.com/react-component/slider
+287078142624665488588800
+Processed rc-slider. Time: 0:00:34.832998
+# of processed repositories so far: 49
+Processing: https://github.com/facebook/create-react-app
+29937600
+Processed react-dev-utils. Time: 0:00:33.789852
+# of processed repositories so far: 50
+Processing: https://github.com/facebook/create-react-app
+29937600
+Processed babel-preset-react-app. Time: 0:00:38.560591
+# of processed repositories so far: 51
+Processing: https://github.com/facebook/create-react-app
+29937600
+Processed eslint-config-react-app. Time: 0:00:37.783092
+# of processed repositories so far: 52
+Processing: https://github.com/facebook/create-react-app
+29937600
+Processed react-scripts. Time: 0:00:34.305999
+# of processed repositories so far: 53
+Processing: https://github.com/facebook/create-react-app
+29937600
+Processed babel-plugin-named-asset-import. Time: 0:00:35.850366
+# of processed repositories so far: 54
+Processing: https://github.com/facebook/create-react-app
+29937600
+Processed react-app-polyfill. Time: 0:00:38.194763
+# of processed repositories so far: 55
+Processing: https://github.com/oclif/command
+4495702176000
+Processed @oclif/command. Time: 0:00:31.652553
+# of processed repositories so far: 56
+Processing: https://github.com/alexreardon/memoize-one
+9216
+Processed memoize-one. Time: 0:00:39.109392
+# of processed repositories so far: 57
+Processing: https://github.com/facebook/create-react-app
+Error processing repository => Cloning into 'react-error-overlay'...
+
+# of processed repositories so far: 58
+Processing: https://github.com/airbnb/babel-plugin-dynamic-import-node
+13200
+Processed babel-plugin-dynamic-import-node. Time: 0:00:31.017076
+# of processed repositories so far: 59
+Processing: https://github.com/stefanpenner/es6-promise
+218880
+Processed es6-promise. Time: 0:00:32.143322
+# of processed repositories so far: 60
+Processing: https://github.com/oclif/config
+3539289600000
+Processed @oclif/config. Time: 0:00:35.839995
+# of processed repositories so far: 61
+Processing: https://github.com/ardatan/graphql-tools
+1
+Processed graphql-tools. Time: 0:00:39.081156
+# of processed repositories so far: 62
+Processing: https://github.com/jshint/jshint
+1
+Processed jshint. Time: 0:00:13.259118
+# of processed repositories so far: 63
+Processing: https://github.com/jest-community/jest-watch-typeahead
+452390400
+Processed jest-watch-typeahead. Time: 0:00:32.213659
+# of processed repositories so far: 64
+Processing: https://github.com/getsentry/raven-js
+8333045268480
+Processed raven. Time: 0:00:39.701298
+# of processed repositories so far: 65
+Processing: https://github.com/vuejs/vuex
+338182525384704000
+Processed vuex. Time: 0:00:52.052206
+# of processed repositories so far: 66
+Processing: https://github.com/59naga/babel-plugin-add-module-exports
+14036520960
+Processed babel-plugin-add-module-exports. Time: 0:00:33.052993
+# of processed repositories so far: 67
+Processing: https://github.com/Leaflet/Leaflet
+324
+Processed leaflet. Time: 0:00:42.053766
+# of processed repositories so far: 68
+Processing: https://github.com/oblador/react-native-vector-icons
+18627840000
+Processed react-native-vector-icons. Time: 0:00:34.371916
+# of processed repositories so far: 69
+Processing: https://github.com/sun-zheng-an/gulp-shell
+74467403960463360
+Processed gulp-shell. Time: 0:00:33.900540
+# of processed repositories so far: 70
+Processing: https://github.com/digitalbazaar/forge
+3326400
+Processed node-forge. Time: 0:00:36.222210
+# of processed repositories so far: 71
+Processing: https://github.com/oliviertassinari/babel-plugin-transform-react-remove-prop-types
+52849406966175499680000
+Processed babel-plugin-transform-react-remove-prop-types. Time: 0:00:32.212387
+# of processed repositories so far: 72
+Processing: https://github.com/immerjs/immer
+80905355919360
+Processed immer. Time: 0:00:31.736959
+# of processed repositories so far: 73
+Processing: https://github.com/babel/babel-loader
+13256679673036800000
+Processed babel-loader. Time: 0:00:35.970610
+# of processed repositories so far: 74
+Processing: https://github.com/johnagan/clean-webpack-plugin
+101147686933708800000
+Processed clean-webpack-plugin. Time: 0:00:33.894097
+# of processed repositories so far: 75
+Processing: https://github.com/babel/babylon
+151036389504000000
+Processed babylon. Time: 0:00:41.950875
+# of processed repositories so far: 76
+Processing: https://github.com/tildeio/rsvp.js
+360
+Processed rsvp. Time: 0:00:37.773229
+# of processed repositories so far: 77
+Processing: https://github.com/ethereumjs/ethereumjs-util
+72
+Processed ethereumjs-util. Time: 0:00:31.058430
+# of processed repositories so far: 78
+Processing: https://github.com/sass/node-sass
+2851200
+Processed node-sass. Time: 0:00:42.256883
+# of processed repositories so far: 79
+Processing: https://github.com/chimurai/http-proxy-middleware
+14556672000
+Processed http-proxy-middleware. Time: 0:00:43.471952
+# of processed repositories so far: 80
+Processing: https://github.com/iamkun/dayjs
+881362944
+Processed dayjs. Time: 0:00:37.573812
+# of processed repositories so far: 81
+Processing: https://github.com/Pomax/react-onclickoutside
+1
+Processed react-onclickoutside. Time: 0:00:26.800096
+# of processed repositories so far: 82
+Processing: https://github.com/vuejs/vue-router
+6270874553548800000
+Processed vue-router. Time: 0:01:06.015902
+# of processed repositories so far: 83
+Processing: https://github.com/ajv-validator/ajv
+484100337756672000
+Processed ajv. Time: 0:00:40.116874
+# of processed repositories so far: 84
+Processing: https://github.com/oclif/plugin-help
+406425600000
+Processed @oclif/plugin-help. Time: 0:00:40.786428
+# of processed repositories so far: 85
+Processing: https://github.com/davidtheclark/cosmiconfig
+22895308800
+Processed cosmiconfig. Time: 0:00:40.024178
+# of processed repositories so far: 86
+Processing: https://github.com/ethereumjs/ethereumjs-tx
+12
+Processed ethereumjs-tx. Time: 0:00:26.515261
+# of processed repositories so far: 87
+Processing: https://github.com/mozilla/nunjucks
+8
+Processed nunjucks. Time: 0:00:26.321593
+# of processed repositories so far: 88
+Processing: https://github.com/redux-utilities/redux-actions
+8175637210890240
+Processed redux-actions. Time: 0:00:38.513125
+# of processed repositories so far: 89
+Processing: https://github.com/evcohen/eslint-plugin-jsx-a11y
+623
+Processed eslint-plugin-jsx-a11y. Time: 0:00:22.685066
+# of processed repositories so far: 90
+Processing: https://github.com/typescript-eslint/typescript-eslint
+1
+Processed @typescript-eslint/parser. Time: 0:00:54.404654
+# of processed repositories so far: 91
+Processing: https://github.com/typescript-eslint/typescript-eslint
+1
+Processed @typescript-eslint/eslint-plugin. Time: 0:00:46.700020
+# of processed repositories so far: 92
+Processing: https://github.com/vuejs/vue-class-component
+1517343664590028800000
+Processed vue-class-component. Time: 0:00:43.520859
+# of processed repositories so far: 93
+Processing: https://github.com/s-panferov/awesome-typescript-loader
+1310975378288233781760000
+Processed awesome-typescript-loader. Time: 0:00:38.471005
+# of processed repositories so far: 94
+Processing: https://github.com/koajs/koa
+33592320
+Processed koa. Time: 0:00:44.265642
+# of processed repositories so far: 95
+Processing: https://github.com/mrmlnc/fast-glob
+10608185917440
+Processed fast-glob. Time: 0:00:42.571661
+# of processed repositories so far: 96
+Processing: https://github.com/axios/axios
+238673433600000
+Processed axios. Time: 0:00:46.297205
+# of processed repositories so far: 97
+Processing: https://github.com/mobxjs/mobx
+3803361168752640
+Processed mobx. Time: 0:00:46.889533
+# of processed repositories so far: 98
+Processing: https://github.com/oliver-moran/jimp
+94691628568018944000
+Processed jimp. Time: 0:01:56.520302
+# of processed repositories so far: 99
+Processing: https://github.com/ReactTraining/react-router
+1
+Processed react-router-dom. Time: 0:00:12.072867
+# of processed repositories so far: 100
+Processing: https://github.com/ReactTraining/react-router
+1
+Processed react-router. Time: 0:00:15.688494
+# of processed repositories so far: 101
+Processing: https://github.com/jest-community/eslint-plugin-jest
+383
+Processed eslint-plugin-jest. Time: 0:00:28.811092
+# of processed repositories so far: 102
+Processing: https://github.com/reactjs/react-router-redux
+4167617762728408765547151360000000
+Processed react-router-redux. Time: 0:00:49.384475
+# of processed repositories so far: 103
+Processing: https://github.com/krisk/Fuse
+3707256833280
+Processed fuse.js. Time: 0:00:52.562334
+# of processed repositories so far: 104
+Processing: https://github.com/localForage/localForage
+1
+Processed localforage. Time: 0:00:53.668310
+# of processed repositories so far: 105
+Processing: https://github.com/airbnb/enzyme
+69632136
+Processed enzyme. Time: 0:00:54.942411
+# of processed repositories so far: 106
+Processing: https://github.com/enzymejs/enzyme
+69632136
+Processed enzyme-adapter-react-16. Time: 0:00:52.579535
+# of processed repositories so far: 107
+Processing: https://github.com/jquery/jquery
+1
+Processed jquery. Time: 0:00:58.927988
+# of processed repositories so far: 108
+Processing: https://github.com/facebook/draft-js
+2809080
+Processed draft-js. Time: 0:00:56.338592
+# of processed repositories so far: 109
+Processing: https://github.com/react-bootstrap/dom-helpers
+319488
+Processed dom-helpers. Time: 0:00:58.846738
+# of processed repositories so far: 110
+Processing: https://github.com/Timer/fork-ts-checker-webpack-plugin
+2397134367544066375680000000000
+Processed fork-ts-checker-webpack-plugin-alt. Time: 0:00:57.716783
+# of processed repositories so far: 111
+Processing: https://github.com/andyearnshaw/Intl.js
+5773987705651200000
+Processed intl. Time: 0:01:03.851560
+# of processed repositories so far: 112
+Processing: https://github.com/quilljs/quill
+141404583179059200
+Processed quill. Time: 0:01:00.123790
+# of processed repositories so far: 113
+Processing: https://github.com/sindresorhus/got
+144
+Processed got. Time: 0:00:58.466956
+# of processed repositories so far: 114
+Processing: https://github.com/TypeStrong/ts-loader
+115562726111566268027338516070400000000
+Processed ts-loader. Time: 0:01:08.299789
+# of processed repositories so far: 115
+Processing: https://github.com/niksy/throttle-debounce
+15896249745168166133760000
+Processed throttle-debounce. Time: 0:00:53.022483
+# of processed repositories so far: 116
+Processing: https://github.com/mobxjs/mobx-react
+1995310734829011465609486910747658158080000000
+Processed mobx-react. Time: 0:00:58.252963
+# of processed repositories so far: 117
+Processing: https://github.com/styled-components/polished
+3446840770560000
+Processed polished. Time: 0:01:03.698717
+# of processed repositories so far: 118
+Processing: https://github.com/ReactTraining/history
+1
+Processed history. Time: 0:00:16.340274
+# of processed repositories so far: 119
+Processing: https://github.com/visionmedia/superagent
+96
+Processed superagent. Time: 0:01:05.831866
+# of processed repositories so far: 120
+Processing: https://github.com/FezVrasta/popper.js
+5415226178361753600
+Processed popper.js. Time: 0:01:10.665528
+# of processed repositories so far: 121
+Processing: https://github.com/reactjs/react-transition-group
+79667546112000
+Processed react-transition-group. Time: 0:01:08.339601
+# of processed repositories so far: 122
+Processing: https://github.com/csstools/postcss-preset-env
+928080384000
+Processed postcss-preset-env. Time: 0:01:04.700219
+# of processed repositories so far: 123
+Processing: https://github.com/zloirock/core-js
+1
+Processed core-js. Time: 0:00:37.142419
+# of processed repositories so far: 124
+Processing: https://github.com/styled-components/styled-components
+37014883220951446616650285056000000
+Processed styled-components. Time: 0:01:04.686590
+# of processed repositories so far: 125
+Processing: https://github.com/vuejs/vue-loader
+257765767122124800000000000
+Processed vue-loader. Time: 0:01:03.135381
+# of processed repositories so far: 126
+Processing: https://github.com/TypeStrong/fork-ts-checker-webpack-plugin
+124299570278467584000
+Processed fork-ts-checker-webpack-plugin. Time: 0:01:08.372443
+# of processed repositories so far: 127
+Processing: https://github.com/oclif/cli-ux
+20765125308107980800
+Processed cli-ux. Time: 0:01:15.481901
+# of processed repositories so far: 128
+Processing: https://github.com/benmosher/eslint-plugin-import
+2
+Processed eslint-plugin-import. Time: 0:00:20.847220
+# of processed repositories so far: 129
+Processing: https://github.com/babel/ember-cli-babel
+4299816960000
+Processed ember-cli-babel. Time: 0:01:12.846432
+# of processed repositories so far: 130
+Processing: https://github.com/gaearon/react-hot-loader
+37836752444266153771008000000000
+Processed react-hot-loader. Time: 0:01:06.140378
+# of processed repositories so far: 131
+Processing: https://github.com/akiran/react-slick
+13905083377172552115678799991833236602880000
+Processed react-slick. Time: 0:01:05.909057
+# of processed repositories so far: 132
+Processing: https://github.com/chenglou/react-motion
+1272700576669078677981914726400000000
+Processed react-motion. Time: 0:01:11.261089
+# of processed repositories so far: 133
+Processing: https://github.com/reactstrap/reactstrap
+48767110624257575932150065974476800000
+Processed reactstrap. Time: 0:01:05.851111
+# of processed repositories so far: 134
+Processing: https://github.com/ember-cli/ember-cli-htmlbars
+1
+Processed ember-cli-htmlbars. Time: 0:01:08.835945
+# of processed repositories so far: 135
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/runtime'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 136
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/core'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 137
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/preset-env'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 138
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/polyfill'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 139
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/plugin-proposal-class-properties'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 140
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/preset-react'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 141
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/plugin-transform-runtime'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 142
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/cli'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 143
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/plugin-proposal-decorators'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 144
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/register'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 145
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/types'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 146
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/preset-typescript'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 147
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/runtime-corejs2'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 148
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/parser'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 149
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/traverse'...
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 150
+Processing: https://github.com/babel/babel
+Error processing repository => Cloning into '@babel/plugin-proposal-export-default-from'...
+warning: unable to access 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-bare-style,-function-calls,-chained,-single-line-arrow-function/.gitattributes': Filename too long
+fatal: cannot create directory at 'packages/babel-parser/test/fixtures/experimental/pipeline-operator/proposal-smart-error,-nested-pipelines,-topic-style-with-arrow-function-with-bare-style,-no-outer-topic-reference': Filename too long
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+
+
+# of processed repositories so far: 151
+Processing: https://github.com/babel/babel
+1
+Processed @babel/plugin-proposal-export-namespace-from. Time: 0:00:23.364014
+# of processed repositories so far: 152
+Processing: https://github.com/babel/babel-preset-env
+119439360
+Processed babel-preset-env. Time: 0:00:55.896066
+# of processed repositories so far: 153
+Processing: https://github.com/bvaughn/react-virtualized
+324087699661545736010465280000000000
+Processed react-virtualized. Time: 0:01:52.310679
+# of processed repositories so far: 154
+Processing: https://github.com/react-bootstrap/react-bootstrap
+575078400
+Processed react-bootstrap. Time: 0:02:02.458228
+# of processed repositories so far: 155
+Processing: https://github.com/Hacker0x01/react-datepicker
+2137721334628185278093721600000000
+Processed react-datepicker. Time: 0:01:44.330411
+# of processed repositories so far: 156
+Processing: https://github.com/JedWatson/react-select
+987715766387219122479692791274512381378560000000000
+Processed react-select. Time: 0:01:52.202789
+# of processed repositories so far: 157
+Processing: https://github.com/facebook/jest
+1
+Processed jest. Time: 0:01:54.077705
+# of processed repositories so far: 158
+Processing: https://github.com/facebook/jest
+1
+Processed babel-jest. Time: 0:02:04.853095
+# of processed repositories so far: 159
+Processing: https://github.com/facebook/jest
+1
+Processed jest-resolve. Time: 0:01:46.241290
+# of processed repositories so far: 160
+Processing: https://github.com/pouchdb/pouchdb
+1
+Processed pouchdb. Time: 0:01:58.152190
+# of processed repositories so far: 161
+Processing: https://github.com/alibaba/BizCharts
+21041474360696107945123359460436213760000000000
+Processed bizcharts. Time: 0:01:48.217809
+# of processed repositories so far: 162
+Processing: https://github.com/firebase/firebase-js-sdk
+1
+Processed firebase. Time: 0:02:07.037682
+# of processed repositories so far: 163
+Processing: https://github.com/facebook/react
+1
+Processed react. Time: 0:01:27.849423
+# of processed repositories so far: 164
+Processing: https://github.com/facebook/react
+1
+Processed react-dom. Time: 0:01:28.309807
+# of processed repositories so far: 165
+Processing: https://github.com/facebook/react
+1
+Processed create-react-class. Time: 0:01:29.989366
+# of processed repositories so far: 166
+Processing: https://github.com/facebook/react
+1
+Processed eslint-plugin-react-hooks. Time: 0:01:29.520815
+# of processed repositories so far: 167
+Processing: https://github.com/facebook/react
+1
+Processed react-addons-css-transition-group. Time: 0:01:25.113557
+# of processed repositories so far: 168
+Processing: https://github.com/facebook/react
+1
+Processed react-test-renderer. Time: 0:01:27.439701
+# of processed repositories so far: 169
+Processing: https://github.com/facebook/react
+1
+Processed react-addons-shallow-compare. Time: 0:01:29.594235
+# of processed repositories so far: 170
+Processing: https://github.com/prettier/prettier
+1
+Processed prettier. Time: 0:00:55.339005
+# of processed repositories so far: 171
+Processing: https://github.com/Semantic-Org/Semantic-UI-React
+7880317329660923678294016
+Processed semantic-ui-react. Time: 0:02:51.492611
+# of processed repositories so far: 172
+Processing: https://github.com/alibaba-fusion/next
+18720
+Processed @alifd/next. Time: 0:03:02.777718
+# of processed repositories so far: 173
+Processing: https://github.com/angular/components
+3041280
+Processed @angular/cdk. Time: 0:00:43.388071
+# of processed repositories so far: 174
+Processing: https://github.com/angular/components
+3041280
+Processed @angular/material. Time: 0:00:39.534149
+# of processed repositories so far: 175
+Processing: https://github.com/angular/angular-cli
+1
+Processed @angular-devkit/core. Time: 0:02:55.692035
+# of processed repositories so far: 176
+Processing: https://github.com/angular/angular-cli
+1
+Processed @angular-devkit/schematics. Time: 0:02:51.963205
+# of processed repositories so far: 177
+Processing: https://github.com/ant-design/ant-design
+13246199900509284426684822539375504995383274210417506653306880000000000
+Processed antd. Time: 0:04:31.207837
+# of processed repositories so far: 178
+-------------------------------
+Process completed. Time: 2:15:23.897433
+-------------------------------

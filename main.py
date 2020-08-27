@@ -11,6 +11,7 @@ import os.path
 from db_helper import DBInstance
 from threading import Thread
 from datetime import datetime
+# from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ------------------------------------------
 # sample input: dict_lib_versions = {'libA': ['vA1', 'vA2', 'vA3'],
@@ -33,11 +34,18 @@ def get_all_lib_combos(dict_lib_versions):
 def get_allowed_versions_from_all(all_versions, version_rule):
 
     allowed_versions = []
-    rule = semantic_version.SimpleSpec(version_rule)
 
-    for version in all_versions:
-        if(semantic_version.Version(version) in rule):
-            allowed_versions.append(version)
+    try:
+        rule = semantic_version.SimpleSpec(version_rule)
+
+        for version in all_versions:
+            if(semantic_version.Version(version) in rule):
+                allowed_versions.append(version)
+
+    except ValueError as ex:
+        allowed_versions = [version_rule]
+        print("Keeping original version (%s) for error: %s" %
+              (version_rule, str(ex)))
 
     return allowed_versions
 
@@ -270,131 +278,141 @@ def list_to_dict(libs, dep_type):
     dict = {libs[i]: dep_type for i in range(0, sz)}
     return dict
 
+# removes invalid chars from file name
+
+
+def get_file_safe_name(name):
+    return "".join([c for c in name if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
 
 # main process that runs in thread
-def process_repo(run_stats, repo, dataset_root, project_root, db_instance):
+
+
+def process_repo(repo, dataset_root, project_root, db_instance):
     try:
         print("Processing: " + repo["url"])
         ts = datetime.now()
 
-        run_stats["total"] += 1
+        repo_name = clone_repo_to_dir(
+            dataset_root, repo["url"], repo["name"])
 
-        if(repo["has_package_lock"]):
-            print(repo["name"] + " has package-lock.json")
-            run_stats["package-lock"] += 1
+        try:
+            repo_loc = os.path.join(dataset_root, repo_name)
 
-        if len(repo["overlapping_libs"]) > 0:
-            print(repo["name"] + " has overlapping libraries: " +
-                  ",".join(repo["overlapping_libs"]))
-            run_stats["overlapping"] += 1
+            package_json_loc = os.path.join(repo_loc, "package.json")
 
-        if repo["has_package_lock"] == False and len(repo["overlapping_libs"]) == 0:
-            repo_name = clone_repo_to_dir(
-                dataset_root, repo["url"], repo["name"])
+            package_json = read_package_json(package_json_loc)
 
-            try:
-                repo_loc = os.path.join(dataset_root, repo_name)
+            libraries = []
+            dict_lib_versions = {}
+            dict_lib_type = {}
 
-                package_json_loc = os.path.join(repo_loc, "package.json")
+            for dependency_type in ["dependencies", "devDependencies"]:
+                try:
+                    result = get_dependencies(
+                        package_json, dependency_type)
+                    # adding all dependent libraries in list
+                    libraries.extend(result[0])
+                    # adding all dependencies in dictionary
+                    dict_lib_versions.update(result[1])
+                    # tracking which lib comes from which type
+                    dict_lib_type.update(list_to_dict(
+                        result[0], dependency_type))
 
-                package_json = read_package_json(package_json_loc)
+                except Exception as ex:
+                    pass
 
-                libraries = []
-                dict_lib_versions = {}
-                dict_lib_type = {}
+            # write mult in library_combo.txt
+            # sort using sort_library_combo.py
+            mult = 1
+            for lib in libraries:
+                mult *= len(dict_lib_versions[lib])
+            print(mult)
 
-                for dependency_type in ["dependencies", "devDependencies"]:
-                    try:
-                        result = get_dependencies(
-                            package_json, dependency_type)
-                        # adding all dependent libraries in list
-                        libraries.extend(result[0])
-                        # adding all dependencies in dictionary
-                        dict_lib_versions.update(result[1])
-                        # tracking which lib comes from which type
-                        dict_lib_type.update(list_to_dict(
-                            result[0], dependency_type))
+            out = open("library_combo.txt", "a")
+            out.write(repo["name"] + "\t" + str(mult) + "\t" + repo["url"])
+            out.write("\n")
+            out.close()
 
-                    except Exception as ex:
-                        pass
+            ############
+            # log_file_loc = os.path.join(
+            #     project_root, "logs", get_file_safe_name(repo_name) + ".txt")
+            # log = open(log_file_loc, "w")
 
-                log_file_loc = os.path.join(
-                    project_root, "logs", repo_name + ".txt")
-                log = open(log_file_loc, "w")
+            # libraries_str = "\t".join(libraries)
+            # log.write(libraries_str + "\tReason\n")
 
-                libraries_str = "\t".join(libraries)
-                log.write(libraries_str + "\tReason\n")
+            # library_combos = get_all_lib_combos(
+            #     dict_lib_versions)
 
-                # mult = 1
-                # for lib in libraries:
-                # mult *= len(dict_lib_versions[lib])
-                # print(mult)
+            # for combo in library_combos:
 
-                library_combos = get_all_lib_combos(
-                    dict_lib_versions)
+            #     if(len(libraries) != len(combo)):
+            #         raise Exception(
+            #             "Mismatch in no. of libraries and versions")
 
-                found_missing_script = False
+            #     if db_instance != "":
+            #         add_combo_repo(
+            #             db_instance, libraries, combo, repo["url"])
+            #     else:
+            #         print("DATABASE CONNECTION FAILED")
 
-                for combo in library_combos:
+            #     update_package_json(
+            #         package_json_loc, libraries, dict_lib_type, combo)
 
-                    if(len(libraries) != len(combo)):
-                        raise Exception(
-                            "Mismatch in no. of libraries and versions")
+            #     project_path = repo_loc
 
-                    if db_instance != "":
-                        add_combo_repo(
-                            db_instance, libraries, combo, repo["url"])
-                    else:
-                        print("DATABASE CONNECTION FAILED")
+            #     npm_install_result = execute_cmd(
+            #         project_path, "npm install")
 
-                    update_package_json(
-                        package_json_loc, libraries, dict_lib_type, combo)
+            #     if(npm_install_result[0]):
+            #         build_project_result = execute_cmd(
+            #             project_path, "npm run build")
 
-                    project_path = repo_loc
+            #         if(build_project_result[0] == False):
+            #             combo_str = "\t".join(combo)
+            #             reason = build_project_result[1]
+            #             reason = reason.replace(
+            #                 "\n", "</ br>").replace("\t", "</ TAB>")
+            #             log.write(combo_str + "\t" + reason + "\n")
 
-                    npm_install_result = execute_cmd(
-                        project_path, "npm install")
+            #     # removing, even if partially installed
+            #     remove_folder(project_path, "node_modules")
 
-                    if(npm_install_result[0]):
-                        build_project_result = execute_cmd(
-                            project_path, "npm run build")
+            # log.close()
+            ############
+        except Exception as ex:
+            raise ex
 
-                        if(build_project_result[0] == False):
-                            combo_str = "\t".join(combo)
-                            reason = build_project_result[1]
-                            reason = reason.replace(
-                                "\n", "</ br>").replace("\t", "</ TAB>")
-                            log.write(combo_str + "\t" + reason + "\n")
+        finally:
+            # removing repo folder after working on it
+            remove_folder(dataset_root, repo_name)
 
-                            if is_missing_script(build_project_result[1]):
-                                found_missing_script = True
-                                run_stats["missing-script"] += 1
-
-                    # removing, even if partially installed
-                    remove_folder(project_path, "node_modules")
-
-                    if found_missing_script:
-                        break
-
-                log.close()
-            except Exception as ex:
-                raise ex
-
-            finally:
-                # removing repo folder after working on it
-                remove_folder(dataset_root, repo_name)
-
-                te = datetime.now()
-                print("Processed " + repo_name + ". Time: " + str(te - ts))
-
-                print("# of processed repositories so far: " +
-                      str(run_stats["total"]))
+            te = datetime.now()
+            print("Processed " + repo_name + ". Time: " + str(te - ts))
 
     except Exception as ex:
         print("Error processing repository => " + str(ex))
 
+# updates sorted library combo count
+
+
+def update_repo_count(repositories):
+    # this block will only be active when combo count needs to be calculated
+    log = open("library_combo.txt", "w")
+    helper = GitHelper()
+
+    for repo in repositories:
+        no_of_deps = helper.get_no_of_dependencies(repo["url"])
+        log.write(repo["name"] + "\t" +
+                  str(no_of_deps) + "\t" + repo["url"])
+        log.write("\n")
+
+    log.close()
+
 
 if __name__ == "__main__":
+
+    # remove_folder("C:\\Mahir\\VT\\Research\\npm-package-coupling\\sources", "dataset")
 
     # github = GitHelper("dependencies")
     # repositories = github.get_ok_to_process_repos()
@@ -402,20 +420,10 @@ if __name__ == "__main__":
     repositories = get_npm_rank_repos()
 
     if False:
-        # this block will only be active when combo count needs to be calculated
-        log = open("library_combo.txt", "w")
-        helper = GitHelper()
-
-        for repo in repositories:
-            no_of_deps = helper.get_no_of_dependencies(repo["url"])
-            log.write(repo["name"] + "\t" +
-                      str(no_of_deps) + "\t" + repo["url"])
-            log.write("\n")
-
-        log.close()
+        update_repo_count(repositories)
 
     dict_repo_count = get_dict_repo_count()  # has count of # of possible combos
-    # TODO: Need to update it, because it is read from file and is not updated automatically
+    # TODO: Need to update, because it is read from file and is not updated automatically
 
     # keeping only repos having <= 1000 possible combos
     # TODO: Current dataset has no duplicate names, but need to handle it in future to make tool scalable
@@ -430,7 +438,7 @@ if __name__ == "__main__":
     # sort them based on their valid combo count
     repositories.sort(key=lambda repo: repo["count"])
 
-    repositories = list(map(lambda repo: collect_info(repo), repositories))
+    # repositories = list(map(lambda repo: collect_info(repo), repositories))
 
     config = configparser.ConfigParser()
     config.read("config.ini")
@@ -448,55 +456,74 @@ if __name__ == "__main__":
     except Exception as ex:
         db_instance = ""
 
-    run_stats = {"total": 0, "package-lock": 0,
-                 "overlapping": 0, "missing-script": 0}
+    # run_stats = {"total": 0, "package-lock": 0,
+    #              "overlapping": 0, "missing-script": 0}
 
-    for repo in repositories:
-        # creating log file out of thread
-        log_file_loc = os.path.join(
-            project_root, "logs", repo["name"] + ".txt")
-        log = open(log_file_loc, "w")
-        log.close()
+    ############
+    # for repo in repositories:
+    #     # creating log file out of thread
+    #     log_file_loc = os.path.join(
+    #         project_root, "logs", get_file_safe_name(repo["name"]) + ".txt")
+    #     log = open(log_file_loc, "w")
+    #     log.close()
+    ############
 
     ts_main = datetime.now()
 
-    threads = []
+    cnt = 0
     for repo in repositories:
-        thread = Thread(target=process_repo, args=(
-            run_stats, repo, dataset_root, project_root, db_instance))
+        cnt += 1
+        process_repo(repo, dataset_root, project_root, db_instance)
+        print("# of processed repositories so far: " + str(cnt))
 
-        ts_limit = datetime.now()
-        # looking for free memory
-        while(True):
-            try:
-                tnow_limit = datetime.now()
-                diff = tnow_limit - ts_limit
-                diff_seconds = diff.total_seconds()
-                diff_minutes = diff_seconds / 60
-                if(diff_minutes >= constants.STOP_SEARCHING_FREE_MEMORY):
-                    print(
-                        repo["name"] + " is taking to long to find free memory. Skipping.")
-                    break
+    ############
+    # threads = []
+    # executor = ThreadPoolExecutor(180)
+    # for repo in repositories:
+    #     thread = executor.submit(
+    #         process_repo, repo, dataset_root, project_root, db_instance)
 
-                thread.start()
-                break
-            except Exception as ex:
-                pass
+    #     threads.append(thread)
 
-        threads.append(thread)
+    #     # thread = Thread(target=process_repo, args=(
+    #     #     repo, dataset_root, project_root, db_instance))
 
-    for thread in threads:
-        thread.join()
+    #     # ts_limit = datetime.now()
+    #     # # looking for free memory
+    #     # while(True):
+    #     #     try:
+    #     #         tnow_limit = datetime.now()
+    #     #         diff = tnow_limit - ts_limit
+    #     #         diff_seconds = diff.total_seconds()
+    #     #         diff_minutes = diff_seconds / 60
+    #     #         if(diff_minutes >= constants.STOP_SEARCHING_FREE_MEMORY):
+    #     #             print(
+    #     #                 repo["name"] + " is taking to long to find free memory. Skipping.")
+    #     #             break
+
+    #     #         thread.start()
+    #     #         break
+    #     #     except Exception as ex:
+    #     #         pass
+
+    #     # threads.append(thread)
+
+    # for thread in as_completed(threads):
+    #     thread.result()
+
+    # # for thread in threads:
+    # #     thread.join()
+    ############
 
     te_main = datetime.now()
 
     print("-------------------------------")
     print("Process completed. Time: " + str(te_main - ts_main))
-    print("# of Total processed repositories: " + str(run_stats["total"]))
-    print("# of repositories having package-lock.json: " +
-          str(run_stats["package-lock"]))
-    print("# of repositories having overlapping libraries in dependencies and devDependencies: " +
-          str(run_stats["overlapping"]))
-    print("# of repositories missing script (build, start etc.): " +
-          str(run_stats["missing-script"]))
+    # print("# of Total processed repositories: " + str(run_stats["total"]))
+    # print("# of repositories having package-lock.json: " +
+    #       str(run_stats["package-lock"]))
+    # print("# of repositories having overlapping libraries in dependencies and devDependencies: " +
+    #       str(run_stats["overlapping"]))
+    # print("# of repositories missing script (build, start etc.): " +
+    #       str(run_stats["missing-script"]))
     print("-------------------------------")
