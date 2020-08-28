@@ -1,0 +1,1 @@
+array-includes	array.prototype.flat	contains-path	debug	doctrine	eslint-import-resolver-node	eslint-module-utils	has	minimatch	object.values	read-pkg-up	resolve	tsconfig-paths	Reason

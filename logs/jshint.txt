@@ -1,0 +1,1 @@
+cli	console-browserify	exit	htmlparser2	lodash	minimatch	shelljs	strip-json-comments	async	browserify	conventional-changelog	conventional-github-releaser	coveralls	istanbul	jscs	mock-stdin	nodeunit	puppeteer	regenerate	results-interpreter	sinon	test262-stream	unicode-5.2.0	unicode-11.0.0	Reason
