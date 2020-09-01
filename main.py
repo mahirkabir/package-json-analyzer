@@ -55,18 +55,25 @@ def get_allowed_versions_from_all(all_versions, version_rule):
 # sample output => "1.12.2, .., 1.12.6, .., 1.12.10, .., 1.12.15"
 # ------------------------------------------
 def get_allowed_versions(library, version):
-    cmd = "npm view {library} versions --json".format(
-        library=library)
+    allowed_versions = []
 
-    out = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
-                           stderr=subprocess.STDOUT)
+    try:
+        cmd = "npm view {library} versions --json".format(
+            library=library)
 
-    stdout, stderr = out.communicate()
-    # utf-8 encoding is reverse compatible with ASCII
-    str_stdout = stdout.decode("utf-8")
-    all_lib_versions = parse_json(str_stdout)
+        out = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT)
 
-    allowed_versions = get_allowed_versions_from_all(all_lib_versions, version)
+        stdout, stderr = out.communicate()
+        # utf-8 encoding is reverse compatible with ASCII
+        str_stdout = stdout.decode("utf-8")
+        all_lib_versions = parse_json(str_stdout)
+
+        allowed_versions = get_allowed_versions_from_all(
+            all_lib_versions, version)
+
+    except Exception as ex:
+        print("Error occurred for library - %s: %s" % (library, str(ex)))
 
     if(len(allowed_versions) == 0):
         allowed_versions.append(version)
@@ -185,9 +192,15 @@ def clone_repo_to_dir(directory, git_url, repo_name):
         return repo_safe_name
 
 
+def remove_file(folder, filename):
+    file_to_delete = os.path.join(folder, filename)
+    if(os.path.isfile(file_to_delete)):
+        if not execute_cmd(folder, "DEL " + file_to_delete):
+            raise Exception("Error removing: " + filename)
+
+
 def remove_folder(root, folder):
-    folder_to_delete = os.path.join(
-        root, folder)
+    folder_to_delete = os.path.join(root, folder)
 
     if(os.path.isdir(folder_to_delete)):
         if not (execute_cmd(folder_to_delete, "DEL /F/Q/S *.* > NUL")[0] and execute_cmd(root, "RMDIR /Q/S " + folder_to_delete)[0]):
@@ -284,6 +297,18 @@ def list_to_dict(libs, dep_type):
 def get_file_safe_name(name):
     return "".join([c for c in name if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
 
+# finds difference between two collections
+
+
+def get_list_diff(list1, list2):
+    return [item for item in (list1 + list2) if item not in list1 or item not in list2]
+
+# finds duplicate entries in a collection
+
+
+def get_duplicate_entries(collection):
+    return [item for item in collection if collection.count(item) > 1]
+
 # main process that runs in thread
 
 
@@ -306,6 +331,8 @@ def process_repo(repo, dataset_root, project_root, db_instance):
             dict_lib_versions = {}
             dict_lib_type = {}
 
+            overlapping_libs = []
+
             for dependency_type in ["dependencies", "devDependencies"]:
                 try:
                     result = get_dependencies(
@@ -321,11 +348,16 @@ def process_repo(repo, dataset_root, project_root, db_instance):
                 except Exception as ex:
                     pass
 
-            #-----------
+            overlapping_libs = get_duplicate_entries(libraries)
+            if len(overlapping_libs) > 0:
+                raise Exception(
+                    "Overlappping libraries in dependencies and devDependencies")
+
+            # -----------
             # FOR finding library valid combo count
             # write mult in library_combo.txt
             # sort using sort_library_combo.py
-            
+
             # mult = 1
             # for lib in libraries:
             #     mult *= len(dict_lib_versions[lib])
@@ -335,7 +367,7 @@ def process_repo(repo, dataset_root, project_root, db_instance):
             # out.write(repo["name"] + "\t" + str(mult) + "\t" + repo["url"])
             # out.write("\n")
             # out.close()
-            #-----------
+            # -----------
 
             ############
             # For finding faulty combo of libraries
@@ -359,7 +391,7 @@ def process_repo(repo, dataset_root, project_root, db_instance):
                     add_combo_repo(
                         db_instance, libraries, combo, repo["url"])
                 else:
-                    print("DATABASE CONNECTION FAILED")
+                    pass  # print("DATABASE CONNECTION FAILED")
 
                 update_package_json(
                     package_json_loc, libraries, dict_lib_type, combo)
@@ -382,6 +414,8 @@ def process_repo(repo, dataset_root, project_root, db_instance):
 
                 # removing, even if partially installed
                 remove_folder(project_path, "node_modules")
+                # removing generated package-lock.json
+                remove_file(project_path, "package-lock.json")
 
             log.close()
             ############
