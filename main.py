@@ -26,6 +26,39 @@ def get_all_lib_combos(dict_lib_versions):
     return list(itertools.product(*lst))
 
 # ------------------------------------------
+# sample input: dict_lib_versions = {'libA': ['vA1', 'vA2', 'vA3'],
+#                         'libB': ['vB1', 'vB2', 'vB3'],
+#                         'libC': ['vC1', 'vC2', 'vC3']}
+# sample output => [('vA3', 'vB2', 'vC3'), ('vA3', 'vB3', 'vC2'), ('vA2', 'vB3', 'vC3'), ('vA1', 'vB3', 'vC3'), ('vA3', 'vB3', 'vC3'), ('vA3', 'vB3', 'vC1'), ('vA3', 'vB1', 'vC3')]
+# linear mechanism to collect different combinations of libraries
+# NOTE: reversing the versions internally to pick the latest ones
+# ------------------------------------------
+
+
+def get_lib_combos_linear(dict_lib_versions):
+    list_vers = list(dict_lib_versions.values())
+    result = []
+    total = len(list_vers)
+    # reverse ordering each version arrays from latest to oldest
+    list_vers = list(map(lambda arr: arr[::-1], list_vers))
+
+    selected_idx = 0  # this is the random version index chosen for other libraries
+    for all_idx in range(0, total):
+        curr_list_vers = []
+        for curr_idx in range(0, total):
+            if curr_idx != all_idx:
+                idx_to_pick = min([len(list_vers[curr_idx]) - 1, selected_idx])
+                # keeping one element in the array
+                curr_list_vers.append([list_vers[curr_idx][idx_to_pick]])
+            else:
+                curr_list_vers.append(list_vers[curr_idx])
+
+        result.extend(list(itertools.product(*curr_list_vers)))
+        curr_list_vers = []
+
+    return list(set(result))
+
+# ------------------------------------------
 # sample input: ([<all webpack versions ("0.1.0" .. "5.0.0-beta.22")>], ~1.12.2)
 # sample output => "1.12.2, .., 1.12.6, .., 1.12.10, .., 1.12.15"
 # ------------------------------------------
@@ -362,62 +395,65 @@ def process_repo(repo, dataset_root, project_root, db_instance):
             # for lib in libraries:
             #     mult *= len(dict_lib_versions[lib])
             # print(mult)
+            mult = len(get_lib_combos_linear(dict_lib_versions))
 
-            # out = open("library_combo.txt", "a")
-            # out.write(repo["name"] + "\t" + str(mult) + "\t" + repo["url"])
-            # out.write("\n")
-            # out.close()
+            out = open("library_combo.txt", "a")
+            out.write(repo["name"] + "\t" + str(mult) + "\t" + repo["url"])
+            out.write("\n")
+            out.close()
             # -----------
 
             ############
             # For finding faulty combo of libraries
-            log_file_loc = os.path.join(
-                project_root, "logs", get_file_safe_name(repo_name) + ".txt")
-            log = open(log_file_loc, "w")
+            # log_file_loc = os.path.join(
+            #     project_root, "logs", get_file_safe_name(repo_name) + ".txt")
+            # log = open(log_file_loc, "w")
 
-            libraries_str = "\t".join(libraries)
-            log.write(libraries_str + "\tReason\n")
+            # libraries_str = "\t".join(libraries)
+            # log.write(libraries_str + "\tReason\n")
 
-            library_combos = get_all_lib_combos(
-                dict_lib_versions)
+            # # library_combos = get_all_lib_combos(
+            # #     dict_lib_versions)
 
-            for combo in library_combos:
+            # library_combos = get_lib_combos_linear(dict_lib_versions)
 
-                if(len(libraries) != len(combo)):
-                    raise Exception(
-                        "Mismatch in no. of libraries and versions")
+            # for combo in library_combos:
 
-                if db_instance != "":
-                    add_combo_repo(
-                        db_instance, libraries, combo, repo["url"])
-                else:
-                    pass  # print("DATABASE CONNECTION FAILED")
+            #     if(len(libraries) != len(combo)):
+            #         raise Exception(
+            #             "Mismatch in no. of libraries and versions")
 
-                update_package_json(
-                    package_json_loc, libraries, dict_lib_type, combo)
+            #     if db_instance != "":
+            #         add_combo_repo(
+            #             db_instance, libraries, combo, repo["url"])
+            #     else:
+            #         pass  # print("DATABASE CONNECTION FAILED")
 
-                project_path = repo_loc
+            #     update_package_json(
+            #         package_json_loc, libraries, dict_lib_type, combo)
 
-                npm_install_result = execute_cmd(
-                    project_path, "npm install")
+            #     project_path = repo_loc
 
-                if(npm_install_result[0]):
-                    build_project_result = execute_cmd(
-                        project_path, "npm run build")
+            #     npm_install_result = execute_cmd(
+            #         project_path, "npm install")
 
-                    if(build_project_result[0] == False):
-                        combo_str = "\t".join(combo)
-                        reason = build_project_result[1]
-                        reason = reason.replace(
-                            "\n", "</ br>").replace("\t", "</ TAB>")
-                        log.write(combo_str + "\t" + reason + "\n")
+            #     if(npm_install_result[0]):
+            #         build_project_result = execute_cmd(
+            #             project_path, "npm run build")
 
-                # removing, even if partially installed
-                remove_folder(project_path, "node_modules")
-                # removing generated package-lock.json
-                remove_file(project_path, "package-lock.json")
+            #         if(build_project_result[0] == False):
+            #             combo_str = "\t".join(combo)
+            #             reason = build_project_result[1]
+            #             reason = reason.replace(
+            #                 "\n", "</ br>").replace("\t", "</ TAB>")
+            #             log.write(combo_str + "\t" + reason + "\n")
 
-            log.close()
+            #     # removing, even if partially installed
+            #     remove_folder(project_path, "node_modules")
+            #     # removing generated package-lock.json
+            #     remove_file(project_path, "package-lock.json")
+
+            # log.close()
             ############
         except Exception as ex:
             raise ex
