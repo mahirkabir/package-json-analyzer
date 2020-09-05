@@ -1,0 +1,1 @@
+@typescript-eslint/eslint-plugin	@typescript-eslint/parser	eslint	eslint-config-prettier	eslint-plugin-jest	eslint-plugin-prettier	eslint-plugin-react	husky	lerna	lint-staged	prettier	react-docgen-typescript-loader	shell-quote	typedoc	yarn	Reason

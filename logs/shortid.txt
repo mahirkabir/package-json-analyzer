@@ -1,0 +1,1 @@
+nanoid	@size-limit/preset-small-lib	chai	clean-publish	envify	grunt	grunt-browserify	grunt-cli	grunt-contrib-concat	grunt-contrib-jshint	grunt-contrib-uglify	grunt-mocha-test	grunt-notify	grunt-open	grunt-release	load-grunt-tasks	mocha	time-grunt	Reason

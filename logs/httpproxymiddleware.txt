@@ -1,0 +1,1 @@
+@types/http-proxy	http-proxy	is-glob	lodash	micromatch	@commitlint/cli	@commitlint/config-conventional	@types/express	@types/is-glob	@types/jest	@types/lodash	@types/micromatch	@types/node	@types/supertest	browser-sync	connect	express	husky	jest	lint-staged	mockttp	open	prettier	supertest	ts-jest	tslint	tslint-config-prettier	typescript	ws	Reason

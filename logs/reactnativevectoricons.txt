@@ -1,0 +1,1 @@
+lodash	prop-types	yargs	@babel/cli	@babel/core	@mdi/font	babel-eslint	eslint	eslint-config-airbnb	eslint-config-prettier	eslint-plugin-import	eslint-plugin-jsx-a11y	eslint-plugin-prettier	eslint-plugin-react	eslint-plugin-react-hooks	evil-icons	feather-icons	font-awesome	fontisto	ionicons	material-design-icons	metro-react-native-babel-preset	octicons	prettier	react	Reason

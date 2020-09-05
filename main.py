@@ -391,69 +391,69 @@ def process_repo(repo, dataset_root, project_root, db_instance):
             # write mult in library_combo.txt
             # sort using sort_library_combo.py
 
-            # mult = 1
-            # for lib in libraries:
-            #     mult *= len(dict_lib_versions[lib])
-            # print(mult)
-            mult = len(get_lib_combos_linear(dict_lib_versions))
+            # # mult = 1
+            # # for lib in libraries:
+            # #     mult *= len(dict_lib_versions[lib])
+            # # print(mult)
+            # mult = len(get_lib_combos_linear(dict_lib_versions))
 
-            out = open("library_combo.txt", "a")
-            out.write(repo["name"] + "\t" + str(mult) + "\t" + repo["url"])
-            out.write("\n")
-            out.close()
+            # out = open("library_combo.txt", "a")
+            # out.write(repo["name"] + "\t" + str(mult) + "\t" + repo["url"])
+            # out.write("\n")
+            # out.close()
             # -----------
 
             ############
             # For finding faulty combo of libraries
-            # log_file_loc = os.path.join(
-            #     project_root, "logs", get_file_safe_name(repo_name) + ".txt")
-            # log = open(log_file_loc, "w")
+            log_file_loc = os.path.join(
+                project_root, "logs", get_file_safe_name(repo_name) + ".txt")
+            log = open(log_file_loc, "w")
 
-            # libraries_str = "\t".join(libraries)
-            # log.write(libraries_str + "\tReason\n")
+            libraries_str = "\t".join(libraries)
+            log.write(libraries_str + "\tReason\n")
 
-            # # library_combos = get_all_lib_combos(
-            # #     dict_lib_versions)
+            # library_combos = get_all_lib_combos(
+            #     dict_lib_versions)
 
-            # library_combos = get_lib_combos_linear(dict_lib_versions)
+            library_combos = get_lib_combos_linear(dict_lib_versions)
 
-            # for combo in library_combos:
+            for combo in library_combos:
 
-            #     if(len(libraries) != len(combo)):
-            #         raise Exception(
-            #             "Mismatch in no. of libraries and versions")
+                if(len(libraries) != len(combo)):
+                    raise Exception(
+                        "Mismatch in no. of libraries and versions")
 
-            #     if db_instance != "":
-            #         add_combo_repo(
-            #             db_instance, libraries, combo, repo["url"])
-            #     else:
-            #         pass  # print("DATABASE CONNECTION FAILED")
+                if db_instance != "":
+                    add_combo_repo(
+                        db_instance, libraries, combo, repo["url"])
+                else:
+                    pass  # print("DATABASE CONNECTION FAILED")
 
-            #     update_package_json(
-            #         package_json_loc, libraries, dict_lib_type, combo)
+                update_package_json(
+                    package_json_loc, libraries, dict_lib_type, combo)
 
-            #     project_path = repo_loc
+                project_path = repo_loc
 
-            #     npm_install_result = execute_cmd(
-            #         project_path, "npm install")
+                npm_install_result = execute_cmd(
+                    project_path, "npm install")
 
-            #     if(npm_install_result[0]):
-            #         build_project_result = execute_cmd(
-            #             project_path, "npm run build")
+                if(npm_install_result[0]):
+                    build_project_result = execute_cmd(
+                        project_path, "npm run build")
 
-            #         if(build_project_result[0] == False):
-            #             combo_str = "\t".join(combo)
-            #             reason = build_project_result[1]
-            #             reason = reason.replace(
-            #                 "\n", "</ br>").replace("\t", "</ TAB>")
-            #             log.write(combo_str + "\t" + reason + "\n")
+                    if(build_project_result[0] == False):
+                        combo_str = "\t".join(combo)
+                        reason = build_project_result[1]
+                        reason = reason.replace(
+                            "\n", "</ br>").replace("\t", "</ TAB>")
+                        log.write(combo_str + "\t" + reason + "\n")
 
-            #     # removing, even if partially installed
-            #     remove_folder(project_path, "node_modules")
-            #     # removing generated package-lock.json
-            #     remove_file(project_path, "package-lock.json")
+                # removing, even if partially installed
+                remove_folder(project_path, "node_modules")
+                # removing generated package-lock.json
+                remove_file(project_path, "package-lock.json")
 
-            # log.close()
+            log.close()
             ############
         except Exception as ex:
             raise ex

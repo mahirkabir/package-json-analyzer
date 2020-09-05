@@ -1,0 +1,1 @@
+lodash	string-natural-compare	@babel/cli	@babel/core	@babel/node	@babel/plugin-proposal-object-rest-spread	@babel/preset-env	@babel/register	ajv	babel-eslint	babel-plugin-add-module-exports	chai	eclint	eslint	eslint-config-canonical	gitdown	glob	husky	jsonlint	mocha	rimraf	semantic-release	Reason

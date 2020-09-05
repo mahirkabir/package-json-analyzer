@@ -1,0 +1,1 @@
+camelcase	chalk	eslint	eslint-config-es5	jest	jest-cli	prettier	rollup	rollup-plugin-replace	rollup-plugin-uglify	Reason

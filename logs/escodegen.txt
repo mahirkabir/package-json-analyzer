@@ -1,0 +1,1 @@
+estraverse	esutils	esprima	optionator	acorn	bluebird	bower-registry-client	chai	chai-exclude	commonjs-everywhere	gulp	gulp-eslint	gulp-mocha	semver	Reason

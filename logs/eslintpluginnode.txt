@@ -1,0 +1,1 @@
+eslint-plugin-es	eslint-utils	ignore	minimatch	resolve	semver	@mysticatea/eslint-plugin	codecov	eslint	eslint-plugin-node	fast-glob	globals	mocha	nyc	opener	punycode	rimraf	Reason

@@ -1,0 +1,1 @@
+@babel/preset-env	@pika/pack	@pika/plugin-build-types	@pika/plugin-standard-pkg	@pika/types	babel-jest	coveralls	jest	lint-staged	np	pika-plugin-build-web-babel	pika-plugin-clean-dist-src	pre-commit	prettier	Reason

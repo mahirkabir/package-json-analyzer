@@ -1,0 +1,1 @@
+data-uri-to-buffer	fetch-blob	abort-controller	abortcontroller-polyfill	busboy	c8	chai	chai-as-promised	chai-iterator	chai-string	coveralls	delay	form-data	formdata-node	mocha	p-timeout	rollup	tsd	xo	Reason

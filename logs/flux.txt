@@ -1,0 +1,1 @@
+fbemitter	fbjs	babel-core	babel-loader	del	fbjs-scripts	gulp	gulp-babel	gulp-flatten	gulp-header	gulp-rename	gulp-util	immutable	jest	object-assign	react	react-addons-test-utils	react-dom	vinyl-source-stream	webpack	webpack-stream	Reason

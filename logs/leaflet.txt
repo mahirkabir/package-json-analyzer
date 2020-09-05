@@ -1,0 +1,1 @@
+eslint	eslint-config-mourner	git-rev-sync	happen	karma	karma-chrome-launcher	karma-edge-launcher	karma-expect	karma-firefox-launcher	karma-ie-launcher	karma-mocha	karma-phantomjs-launcher	karma-rollup-preprocessor	karma-safari-launcher	karma-sinon	leafdoc	mocha	phantomjs-prebuilt	prosthetic-hand	rollup	rollup-plugin-git-version	rollup-plugin-json	sinon	ssri	uglify-js	Reason
