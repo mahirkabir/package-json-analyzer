@@ -4,7 +4,9 @@ jshint	7	https://github.com/jshint/jshint
 node-forge	9	https://github.com/digitalbazaar/forge
 jade	10	https://github.com/jadejs/jade
 global	11	https://github.com/Raynos/global
+
 utf8	12	https://github.com/mathiasbynens/utf8.js
+
 superagent	14	https://github.com/visionmedia/superagent
 rsvp	14	https://github.com/tildeio/rsvp.js
 @typescript-eslint/parser	19	https://github.com/typescript-eslint/typescript-eslint
@@ -52,7 +54,9 @@ react-onclickoutside	97	https://github.com/Pomax/react-onclickoutside
 html-entities	98	https://github.com/mdevils/node-html-entities
 isobject	98	https://github.com/jonschlinkert/isobject
 draft-js	99	https://github.com/facebook/draft-js
+
 node-sass	100	https://github.com/sass/node-sass
+
 backbone	100	https://github.com/jashkenas/backbone
 systemjs	105	https://github.com/systemjs/systemjs
 hammerjs	106	https://github.com/hammerjs/hammer.js

@@ -1,0 +1,1 @@
+@jsenv/file-size-impact	@rollup/plugin-json	@rollup/plugin-node-resolve	@rollup/plugin-replace	@zeit/ncc	bluebird	concurrently	construct-style-sheets-polyfill	cross-env	mkdirp	mocha	node-fetch	open	rimraf	rollup	rollup-plugin-terser	source-map-support	symbol-es6	terser	whatwg-fetch	Reason

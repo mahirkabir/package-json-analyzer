@@ -1,0 +1,1 @@
+babel-core	babel-plugin-external-helpers	babel-preset-env	bannerize	blanket	changelogplease	ember-suave	git-tags	hammer-simulator	jquery	jquery-hammerjs	jscs	jshint	jshint-stylish	lodash-compat	node-qunit-phantomjs	qunitjs	rollup	rollup-plugin-babel	run-when-changed	serve	uglify-js	Reason
