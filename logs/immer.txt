@@ -1,0 +1,1 @@
+@babel/core	@babel/node	@types/jest	coveralls	cpx2	cross-env	deep-freeze	flow-bin	husky	immutable	import-size	jest	lodash	lodash.clonedeep	prettier	pretty-quick	redux	rimraf	seamless-immutable	semantic-release	spec.ts	ts-jest	tsdx	typescript	webpack	webpack-cli	Reason

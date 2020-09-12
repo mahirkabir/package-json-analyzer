@@ -1,0 +1,1 @@
+babel-plugin-syntax-decorators	babel-runtime	babel-template	babel-cli	babel-plugin-transform-class-properties	babel-plugin-transform-runtime	babel-preset-es2015	chai	mocha	Reason
