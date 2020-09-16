@@ -69,7 +69,7 @@ def get_allowed_versions_from_all(all_versions, version_rule):
     allowed_versions = []
 
     try:
-        rule = semantic_version.SimpleSpec(version_rule)
+        rule = semantic_version.NpmSpec(version_rule)
 
         for version in all_versions:
             if(semantic_version.Version(version) in rule):
@@ -597,7 +597,8 @@ if __name__ == "__main__":
     cnt = 0
     for repo in repositories:
         cnt += 1
-        process_repo(repo, dataset_root, project_root, db_instance)
+        if repo["name"] == "jshint":
+            process_repo(repo, dataset_root, project_root, db_instance)
         print("# of processed repositories so far: " + str(cnt))
 
     ############
