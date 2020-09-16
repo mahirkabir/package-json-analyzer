@@ -342,6 +342,36 @@ def get_list_diff(list1, list2):
 def get_duplicate_entries(collection):
     return [item for item in collection if collection.count(item) > 1]
 
+# changes a library version
+
+
+def change_library_version(project_path, library, new_version):
+    execute_cmd(project_path, "npm uninstall %s" % (library))
+    execute_cmd(project_path, "npm install %s@%s" % (library, new_version))
+
+# changes the library versions for the modified libraries
+# modified_libs = [[library, version], ...]
+
+
+def change_modified_lib_versions(project_path, modified_libs):
+    for lib_ver in modified_libs:
+        change_library_version(project_path, lib_ver[0], lib_ver[1])
+
+# finds out which libraries are modified after previous iteration
+
+
+def get_modified_libs(pre_combo, combo, libraries):
+    modified_libs = []
+
+    idx = 0
+    for ver in combo:
+        if pre_combo[idx] != ver:
+            modified_libs.append([libraries[idx], ver])
+        idx += 1
+
+    return modified_libs
+
+
 # main process that runs in thread
 
 
@@ -417,6 +447,11 @@ def process_repo(repo, dataset_root, project_root, db_instance):
 
             library_combos = get_lib_combos_linear(dict_lib_versions)
 
+            pre_combo = library_combos[0]
+
+            npm_install_result = execute_cmd(
+                repo_loc, "npm install")
+
             for combo in library_combos:
 
                 if(len(libraries) != len(combo)):
@@ -429,24 +464,38 @@ def process_repo(repo, dataset_root, project_root, db_instance):
                 else:
                     pass  # print("DATABASE CONNECTION FAILED")
 
-                update_package_json(
-                    package_json_loc, libraries, dict_lib_type, combo)
+                if False:
+                    # for now, not relying on package.json to update library version
+                    # instead of running npm install that uses package.json, doing it manually
+                    update_package_json(
+                        package_json_loc, libraries, dict_lib_type, combo)
 
                 project_path = repo_loc
 
-                npm_install_result = execute_cmd(
-                    project_path, "npm install")
+                if False:
+                    # instead of installing all libs, only updating the modified ones
+                    # will execute this once, outside of the loop
+                    npm_install_result = execute_cmd(
+                        project_path, "npm install")
 
-                if(npm_install_result[0]):
-                    build_project_result = execute_cmd(
-                        project_path, "npm run build")
+                # finding the modified ones
+                modified_libs = get_modified_libs(pre_combo, combo, libraries)
+                pre_combo = combo
 
-                    if(build_project_result[0] == False):
-                        combo_str = "\t".join(combo)
-                        reason = build_project_result[1]
-                        reason = reason.replace(
-                            "\n", "</ br>").replace("\t", "</ TAB>")
-                        log.write(combo_str + "\t" + reason + "\n")
+                change_modified_lib_versions(project_path, modified_libs)
+
+                # if(npm_install_result[0]):
+                # Move the below block under if-block, if needs to install all like before
+                build_project_result = execute_cmd(
+                    project_path, "npm run build")
+
+                if(build_project_result[0] == False):
+                    combo_str = "\t".join(combo)
+                    reason = build_project_result[1]
+                    reason = reason.replace(
+                        "\n", "</ br>").replace("\t", "</ TAB>")
+                    log.write(combo_str + "\t" + reason + "\n")
+                # ------------------------------------------------
 
                 # removing, even if partially installed
                 remove_folder(project_path, "node_modules")
