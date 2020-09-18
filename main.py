@@ -597,8 +597,7 @@ if __name__ == "__main__":
     cnt = 0
     for repo in repositories:
         cnt += 1
-        if repo["name"] == "jshint":
-            process_repo(repo, dataset_root, project_root, db_instance)
+        process_repo(repo, dataset_root, project_root, db_instance)
         print("# of processed repositories so far: " + str(cnt))
 
     ############
